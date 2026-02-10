@@ -320,7 +320,11 @@ ${manualText}
 
     sendBtn.addEventListener('click', handleSend);
     chatInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleSend();
+        if (e.isComposing) return;
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSend();
+        }
     });
     chatInput.addEventListener('input', function () {
         this.style.height = 'auto';
