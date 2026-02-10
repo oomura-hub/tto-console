@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTO 統合コンソール｜株式会社SOCIAL GREEN TECH</title>
+    <meta name="description" content="TikTok Organic運用の業務マニュアル・構成案ジェネレーター・AIメンターを統合した社内プラットフォーム">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-left" onclick="navigateTo('dashboard')">TTO 統合コンソール</div>
+        <nav class="header-nav">
+            <button class="header-tab active" data-page="dashboard" onclick="navigateTo('dashboard')">ダッシュボード</button>
+            <button class="header-tab" data-page="manual" onclick="navigateTo('manual')">マニュアル</button>
+            <button class="header-tab" data-page="generator" onclick="navigateTo('generator')">ジェネレーター</button>
+        </nav>
+        <div class="header-right">
+            <button class="settings-btn" onclick="openSettings()" title="設定">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path
+                        d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.3-.06.61-.06.94s.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- Main Content Area -->
+        <main class="main-area">
+            <!-- ===== Dashboard Page ===== -->
+            <div class="page" id="page-dashboard">
+                <div class="dashboard-grid">
+                    <div class="dash-card dash-hero" onclick="navigateTo('manual')">
+                        <div class="dash-icon">📖</div>
+                        <h2>業務マニュアル</h2>
+                        <p>TTOの基礎からバズの科学、投稿作成まで。全6章を網羅したプロフェッショナルマニュアル。</p>
+                        <span class="dash-link">開く →</span>
+                    </div>
+                    <div class="dash-card" onclick="navigateTo('generator')">
+                        <div class="dash-icon">⚡</div>
+                        <h2>構成案ジェネレーター</h2>
+                        <p>FMTを選ぶだけで8枚構成の投稿案を自動生成。点数診断、二項対立、ランキング形式に対応。</p>
+                        <span class="dash-link">開く →</span>
+                    </div>
+                    <div class="dash-card dash-disabled">
+                        <div class="dash-icon">🔍</div>
+                        <h2>競合アナライザー</h2>
+                        <p>バズ投稿のURL分析と転用アイデア生成。Apifyベースでリニューアル予定。</p>
+                        <span class="dash-link dash-coming">準備中</span>
+                    </div>
+                    <div class="dash-card dash-stats">
+                        <div class="dash-icon">📊</div>
+                        <h2>クイックリンク</h2>
+                        <div class="quick-links">
+                            <a href="https://docs.google.com/spreadsheets/d/17b68JYL6FaWy45uXoeZz4LyrCMQczGqbC2Eth3_oCGQ/edit"
+                                target="_blank">投稿管理シート</a>
+                            <a href="https://docs.google.com/spreadsheets/d/17b68JYL6FaWy45uXoeZz4LyrCMQczGqbC2Eth3_oCGQ/edit?gid=1340404750#gid=1340404750"
+                                target="_blank">リサーチシート</a>
+                            <a href="https://docs.google.com/spreadsheets/d/17b68JYL6FaWy45uXoeZz4LyrCMQczGqbC2Eth3_oCGQ/edit?gid=1143172260#gid=1143172260"
+                                target="_blank">コメント管理</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== Manual Page ===== -->
+            <div class="page" id="page-manual" style="display:none;">
+                <div class="manual-layout">
+                    <aside class="manual-sidebar">
+                        <div class="sidebar-search">
+                            <input type="text" class="search-input" id="manualSearch" placeholder="マニュアル内検索...">
+                        </div>
+                        <nav class="manual-nav" id="manualNav">
+                            <!-- JS generates navigation from manual-data.js -->
+                        </nav>
+                    </aside>
+                    <div class="manual-content" id="manualContent">
+                        <!-- JS renders manual content -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== Generator Page ===== -->
+            <div class="page" id="page-generator" style="display:none;">
+                <div class="generator-wrapper">
+                    <h1 class="page-title">構成案ジェネレーター</h1>
+                    <p class="page-subtitle">FMTを選択して8枚構成の投稿案を生成します</p>
+                    <div class="gen-controls">
+                        <select id="fmtSelector" class="gen-select">
+                            <option value="score">点数診断系</option>
+                            <option value="binary">二項対立</option>
+                            <option value="ranking">ランキング形式</option>
+                        </select>
+                        <button class="gen-btn" onclick="generateStructure()">生成する</button>
+                    </div>
+                    <div id="genResult" class="gen-result"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Side Panel (AI Chat / Memo) -->
+        <aside class="side-panel">
+            <div class="panel-tabs">
+                <button class="panel-tab active" id="tabChat" onclick="switchPanel('chat')">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                        <path
+                            d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
+                    </svg>
+                    AI Chat
+                </button>
+                <button class="panel-tab" id="tabMemo" onclick="switchPanel('memo')">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                        <path
+                            d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z" />
+                    </svg>
+                    メモ
+                </button>
+            </div>
+            <!-- Chat -->
+            <div class="panel-body" id="panelChat">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message ai-message">何でも聞いてください。TTO関連はマニュアルに基づいて回答し、一般的な質問にも対応します。</div>
+                </div>
+                <div class="chat-input-area">
+                    <div class="chat-input-top">
+                        <select id="modelSelector" class="model-select">
+                            <option value="gemini-2.0-flash" selected>Gemini 2.0 Flash（高速）</option>
+                            <option value="gemini-2.5-pro">Gemini 2.5 Pro（高性能）</option>
+                        </select>
+                    </div>
+                    <div class="chat-input-bottom">
+                        <textarea class="chat-input" id="chatInput" placeholder="質問を入力..." rows="1"></textarea>
+                        <button class="send-btn" id="sendBtn">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Memo -->
+            <div class="panel-body" id="panelMemo" style="display:none;">
+                <div class="memo-header">
+                    <span class="memo-title">メモ</span>
+                    <span class="memo-status" id="memoStatus">保存済み</span>
+                </div>
+                <textarea class="memo-area" id="memoArea" placeholder="マニュアルを読みながらメモを取れます。入力内容は自動で保存されます。"></textarea>
+            </div>
+        </aside>
+    </div>
+
+    <script src="manual-data.js"></script>
+    <script src="generator-data.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
