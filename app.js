@@ -138,8 +138,8 @@ function initMemo() {
     });
 }
 
-// ------- AI Chat (OpenRouter 統合) -------
-const OPENROUTER_KEY = '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';
+// ------- AI Chat (Cloud Run経由 OpenRouter 統合) -------
+const API_BASE = 'https://tto-console-api-293189845667.asia-northeast1.run.app';
 
 // 利用可能モデル一覧
 const AI_MODELS = {
@@ -290,13 +290,10 @@ ${manualText}
             ...conversationHistory
         ];
 
-        const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        const res = await fetch(`${API_BASE}/api/chat`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${OPENROUTER_KEY}`,
-                'Content-Type': 'application/json',
-                'HTTP-Referer': window.location.href,
-                'X-Title': 'TTO Console'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 model: model,
