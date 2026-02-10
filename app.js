@@ -144,22 +144,19 @@ const API_BASE = 'https://tto-console-api-293189845667.asia-northeast1.run.app';
 // 利用可能モデル一覧
 const AI_MODELS = {
     // --- OpenAI ---
+    'openai/gpt-5.3-codex': { name: 'GPT-5.3 Codex', provider: 'OpenAI' },
     'openai/gpt-5.2-pro': { name: 'GPT-5.2 Pro', provider: 'OpenAI' },
     'openai/gpt-5.2': { name: 'GPT-5.2', provider: 'OpenAI' },
     'openai/gpt-4o': { name: 'GPT-4o', provider: 'OpenAI' },
     'openai/gpt-4o-mini': { name: 'GPT-4o Mini', provider: 'OpenAI' },
-    'openai/o3-mini': { name: 'o3-mini（推論）', provider: 'OpenAI' },
     // --- Anthropic ---
-    'anthropic/claude-opus-4.6:thinking': { name: 'Claude Opus 4.6 (Thinking)', provider: 'Anthropic' },
-    'anthropic/claude-opus-4.5:thinking': { name: 'Claude Opus 4.5 (Thinking)', provider: 'Anthropic' },
-    'anthropic/claude-sonnet-4.5:thinking': { name: 'Claude Sonnet 4.5 (Thinking)', provider: 'Anthropic' },
+    'anthropic/claude-opus-4.6': { name: 'Claude Opus 4.6', provider: 'Anthropic' },
+    'anthropic/claude-opus-4.5': { name: 'Claude Opus 4.5', provider: 'Anthropic' },
     'anthropic/claude-sonnet-4.5': { name: 'Claude Sonnet 4.5', provider: 'Anthropic' },
     'anthropic/claude-3.5-sonnet': { name: 'Claude 3.5 Sonnet', provider: 'Anthropic' },
     // --- Google ---
-    'google/gemini-3-pro-high': { name: 'Gemini 3 Pro (High)', provider: 'Google' },
     'google/gemini-3-pro': { name: 'Gemini 3 Pro', provider: 'Google' },
-    'google/gemini-3-pro-low': { name: 'Gemini 3 Pro (Low)', provider: 'Google' },
-    'google/gemini-3-flash': { name: 'Gemini 3 Flash', provider: 'Google' },
+    'google/gemini-3-flash-preview': { name: 'Gemini 3 Flash', provider: 'Google' },
     'google/gemini-2.0-flash-001': { name: 'Gemini 2.0 Flash', provider: 'Google' },
     // --- DeepSeek ---
     'deepseek/deepseek-r1': { name: 'DeepSeek R1（推論）', provider: 'DeepSeek' },
