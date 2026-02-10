@@ -152,6 +152,7 @@ body {
     background: linear-gradient(135deg, rgba(56, 189, 248, 0.03) 0%, transparent 60%);
     opacity: 0;
     transition: opacity 0.3s;
+    pointer-events: none;
 }
 
 .dash-card:hover {
