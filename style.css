@@ -225,6 +225,12 @@ body {
     opacity: 0.7;
 }
 
+.link-desc {
+    color: var(--text-dim);
+    font-weight: 400;
+    font-size: 0.78rem;
+}
+
 /* ===== Manual ===== */
 .manual-layout {
     display: flex;
