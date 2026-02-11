@@ -500,120 +500,120 @@ function formatDate(timestamp) {
     return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
 }
 
-async function runResearch() {
-    const hashtagInput = document.getElementById('researchHashtags').value.trim();
-    if (!hashtagInput) {
-        alert('ハッシュタグを入力してください');
+async function runBatchAnalysis() {
+    const textarea = document.getElementById('batchUrls');
+    const raw = textarea.value.trim();
+    if (!raw) {
+        alert('TikTokのURLを入力してください');
         return;
     }
 
-    const hashtags = hashtagInput.split(/[,、\s]+/).map(h => h.replace(/^#/, '').trim()).filter(h => h);
-    const minViews = parseInt(document.getElementById('researchMinViews').value);
-    const postType = document.getElementById('researchPostType').value;
-    const periodDays = parseInt(document.getElementById('researchPeriod').value);
-    const maxResults = parseInt(document.getElementById('researchMaxResults').value);
+    const urls = raw.split('\n')
+        .map(u => u.trim())
+        .filter(u => u && (u.includes('tiktok.com') || u.includes('vt.tiktok')));
 
-    const status = document.getElementById('researchStatus');
-    const statusText = document.getElementById('researchStatusText');
-    const resultsDiv = document.getElementById('researchResults');
-    const summaryDiv = document.getElementById('researchSummary');
+    if (urls.length === 0) {
+        alert('有効なTikTok URLが見つかりません');
+        return;
+    }
+    if (urls.length > 10) {
+        alert('一度に分析できるのは最大10件です');
+        return;
+    }
+
+    const status = document.getElementById('batchStatus');
+    const statusText = document.getElementById('batchStatusText');
+    const resultsDiv = document.getElementById('batchResults');
 
     status.style.display = 'flex';
     resultsDiv.innerHTML = '';
-    summaryDiv.style.display = 'none';
 
-    // ステップ表示
-    const steps = [
-        '🔍 TikTok投稿を収集中...',
-        '📊 フィルタリング中...',
-        '🧠 データを分析中...'
-    ];
-    let stepIdx = 0;
-    statusText.textContent = steps[0];
-    const stepInterval = setInterval(() => {
-        stepIdx = Math.min(stepIdx + 1, steps.length - 1);
-        statusText.textContent = steps[stepIdx];
-    }, 5000);
+    for (let i = 0; i < urls.length; i++) {
+        statusText.textContent = `投稿 ${i + 1}/${urls.length} を取得中...`;
 
-    try {
-        const res = await fetch(`${API_BASE_RESEARCH}/api/tiktok-search`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ hashtags, minViews, postType, periodDays, maxResults })
-        });
+        try {
+            const res = await fetch(`${API_BASE_RESEARCH}/api/tiktok-batch`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: urls[i] })
+            });
 
-        const data = await res.json();
-        clearInterval(stepInterval);
-        status.style.display = 'none';
+            const data = await res.json();
 
-        if (data.error) {
-            resultsDiv.innerHTML = `<div class="research-error">❌ エラー: ${data.error}</div>`;
-            return;
-        }
+            if (data.error) {
+                resultsDiv.innerHTML += `<div class="batch-error">❌ ${urls[i]}<br>${data.error}</div>`;
+                continue;
+            }
 
-        if (!data.posts || data.posts.length === 0) {
-            resultsDiv.innerHTML = `<div class="research-empty">条件に一致する投稿が見つかりませんでした。<br>ハッシュタグや再生数の条件を変えて再検索してみてください。</div>`;
-            return;
-        }
+            const p = data;
+            const saveRate = p.playCount > 0 ? ((p.collectCount / p.playCount) * 100).toFixed(2) : '0.00';
+            const engRate = p.playCount > 0 ? (((p.diggCount + p.commentCount + p.shareCount + p.collectCount) / p.playCount) * 100).toFixed(2) : '0.00';
 
-        // サマリー表示
-        const avgSaveRate = (data.posts.reduce((s, p) => s + parseFloat(p.saveRate), 0) / data.posts.length).toFixed(2);
-        const avgEngRate = (data.posts.reduce((s, p) => s + parseFloat(p.engagementRate), 0) / data.posts.length).toFixed(2);
-        const totalViews = data.posts.reduce((s, p) => s + p.playCount, 0);
-
-        summaryDiv.style.display = 'flex';
-        summaryDiv.innerHTML = `
-            <div class="summary-stat">
-                <div class="summary-value">${data.posts.length}<span class="summary-unit">件</span></div>
-                <div class="summary-label">ヒット数 (${data.total}件中)</div>
-            </div>
-            <div class="summary-stat">
-                <div class="summary-value">${formatNumber(totalViews)}</div>
-                <div class="summary-label">合計再生数</div>
-            </div>
-            <div class="summary-stat">
-                <div class="summary-value">${avgSaveRate}<span class="summary-unit">%</span></div>
-                <div class="summary-label">平均保存率</div>
-            </div>
-            <div class="summary-stat">
-                <div class="summary-value">${avgEngRate}<span class="summary-unit">%</span></div>
-                <div class="summary-label">平均エンゲージメント率</div>
-            </div>
-        `;
-
-        // 投稿カード表示
-        resultsDiv.innerHTML = data.posts.map(post => `
-            <a href="${post.url}" target="_blank" rel="noopener" class="research-card">
-                <div class="rc-thumbnail" style="background-image: url('${post.thumbnail}')">
-                    ${post.isImage ? `<span class="rc-type-badge">📷 ${post.imageCount}枚</span>` : '<span class="rc-type-badge">🎥 動画</span>'}
+            resultsDiv.innerHTML += `
+                <div class="batch-result-card">
+                    <div class="brc-header">
+                        <div class="brc-thumb" style="background-image: url('${p.thumbnail || ''}')"></div>
+                        <div class="brc-meta">
+                            <div class="brc-author">@${p.author || 'unknown'}</div>
+                            <div class="brc-caption">${(p.caption || '').slice(0, 100)}</div>
+                            <a href="${urls[i]}" target="_blank" class="brc-link">🔗 投稿を開く</a>
+                        </div>
+                    </div>
+                    <div class="brc-kpis">
+                        <div class="brc-kpi">
+                            <div class="brc-kpi-value kpi-accent">${formatNumber(p.playCount || 0)}</div>
+                            <div class="brc-kpi-label">再生数</div>
+                        </div>
+                        <div class="brc-kpi">
+                            <div class="brc-kpi-value">${formatNumber(p.diggCount || 0)}</div>
+                            <div class="brc-kpi-label">いいね</div>
+                        </div>
+                        <div class="brc-kpi">
+                            <div class="brc-kpi-value">${formatNumber(p.commentCount || 0)}</div>
+                            <div class="brc-kpi-label">コメント</div>
+                        </div>
+                        <div class="brc-kpi">
+                            <div class="brc-kpi-value">${formatNumber(p.shareCount || 0)}</div>
+                            <div class="brc-kpi-label">シェア</div>
+                        </div>
+                        <div class="brc-kpi">
+                            <div class="brc-kpi-value">${formatNumber(p.collectCount || 0)}</div>
+                            <div class="brc-kpi-label">保存</div>
+                        </div>
+                        <div class="brc-kpi">
+                            <div class="brc-kpi-value ${parseFloat(saveRate) >= 1 ? 'kpi-hot' : 'kpi-green'}">${saveRate}%</div>
+                            <div class="brc-kpi-label">保存率</div>
+                        </div>
+                        <div class="brc-kpi">
+                            <div class="brc-kpi-value">${engRate}%</div>
+                            <div class="brc-kpi-label">Eng率</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="rc-body">
-                    <div class="rc-author">
-                        <span class="rc-author-name">@${post.author}</span>
-                        <span class="rc-date">${formatDate(post.createTime)}</span>
-                    </div>
-                    <div class="rc-caption">${post.caption.slice(0, 80)}${post.caption.length > 80 ? '...' : ''}</div>
-                    <div class="rc-stats">
-                        <span class="rc-stat">▶ ${formatNumber(post.playCount)}</span>
-                        <span class="rc-stat">❤ ${formatNumber(post.diggCount)}</span>
-                        <span class="rc-stat">💬 ${formatNumber(post.commentCount)}</span>
-                        <span class="rc-stat">🔖 ${formatNumber(post.collectCount)}</span>
-                    </div>
-                    <div class="rc-kpis">
-                        <span class="rc-kpi ${parseFloat(post.saveRate) >= 1 ? 'kpi-hot' : ''}">保存率 ${post.saveRate}%</span>
-                        <span class="rc-kpi">Eng率 ${post.engagementRate}%</span>
-                    </div>
-                    <div class="rc-tags">${post.hashtags.slice(0, 5).map(h => `<span class="rc-tag">#${h}</span>`).join('')}</div>
-                </div>
-            </a>
-        `).join('');
+            `;
+        } catch (e) {
+            resultsDiv.innerHTML += `<div class="batch-error">❌ ${urls[i]}<br>通信エラー: ${e.message}</div>`;
+        }
+    }
 
-    } catch (e) {
-        clearInterval(stepInterval);
-        status.style.display = 'none';
-        resultsDiv.innerHTML = `<div class="research-error">❌ 通信エラー: ${e.message}</div>`;
+    status.style.display = 'none';
+    if (resultsDiv.children.length === 0) {
+        resultsDiv.innerHTML = '<div class="batch-error">分析結果が取得できませんでした</div>';
     }
 }
+
+// URL件数カウンター
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        const ta = document.getElementById('batchUrls');
+        if (ta) {
+            ta.addEventListener('input', () => {
+                const count = ta.value.trim().split('\n').filter(l => l.trim() && (l.includes('tiktok.com') || l.includes('vt.tiktok'))).length;
+                document.getElementById('batchCount').textContent = `${count} / 10 件`;
+            });
+        }
+    }, 100);
+});
 
 // ------- 初期化 -------
 document.addEventListener('DOMContentLoaded', () => {
@@ -622,3 +622,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initChat();
     initMemo();
 });
+

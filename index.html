@@ -123,75 +123,81 @@
                 </div>
             </div>
 
-            <!-- ===== Research Page (TikTok競合リサーチ) ===== -->
+            <!-- ===== Research Page (競合リサーチ) ===== -->
             <div class="page" id="page-research" style="display:none;">
                 <div class="research-wrapper">
                     <h1 class="page-title">競合リサーチ</h1>
-                    <p class="page-subtitle">ハッシュタグからバズ投稿を自動収集・フィルタリング。競合の「勝ちパターン」を発見します。</p>
+                    <p class="page-subtitle">TikTok公式ツールでバズ投稿を発見 → URLをまとめて分析・比較します</p>
 
-                    <div class="research-form">
-                        <div class="research-row">
-                            <div class="research-field research-field-wide">
-                                <label class="research-label">ハッシュタグ <span class="badge">必須</span></label>
-                                <input type="text" id="researchHashtags" class="gen-input-field"
-                                    placeholder="例: KINUI, スキンケア, PR（カンマ区切りで複数可）">
+                    <!-- Step 1: 発見 -->
+                    <div class="research-step">
+                        <div class="step-header">
+                            <span class="step-number">1</span>
+                            <div>
+                                <h2 class="step-title">バズ投稿を見つける</h2>
+                                <p class="step-desc">TikTok Creative Center（公式・無料）で競合のバズ投稿を探します</p>
                             </div>
                         </div>
-                        <div class="research-row">
-                            <div class="research-field">
-                                <label class="research-label">最低再生数</label>
-                                <select id="researchMinViews" class="gen-select-field">
-                                    <option value="10000">1万回以上</option>
-                                    <option value="50000">5万回以上</option>
-                                    <option value="100000" selected>10万回以上</option>
-                                    <option value="500000">50万回以上</option>
-                                    <option value="1000000">100万回以上</option>
-                                </select>
-                            </div>
-                            <div class="research-field">
-                                <label class="research-label">投稿形式</label>
-                                <select id="researchPostType" class="gen-select-field">
-                                    <option value="all" selected>すべて</option>
-                                    <option value="image">画像投稿のみ</option>
-                                    <option value="video">動画投稿のみ</option>
-                                </select>
-                            </div>
-                            <div class="research-field">
-                                <label class="research-label">期間</label>
-                                <select id="researchPeriod" class="gen-select-field">
-                                    <option value="7">1週間以内</option>
-                                    <option value="30" selected>1ヶ月以内</option>
-                                    <option value="90">3ヶ月以内</option>
-                                    <option value="180">6ヶ月以内</option>
-                                    <option value="365">1年以内</option>
-                                </select>
-                            </div>
-                            <div class="research-field">
-                                <label class="research-label">取得件数</label>
-                                <select id="researchMaxResults" class="gen-select-field">
-                                    <option value="30">30件</option>
-                                    <option value="50" selected>50件</option>
-                                    <option value="100">100件</option>
-                                </select>
+                        <div class="cc-cards">
+                            <a href="https://ads.tiktok.com/business/creativecenter/keyword-insights/pc/en"
+                                target="_blank" class="cc-card">
+                                <div class="cc-icon">🔑</div>
+                                <div class="cc-info">
+                                    <div class="cc-name">Keyword Insights</div>
+                                    <div class="cc-desc">キーワードの人気度・トレンド推移。競合が使うキーワードを発見。</div>
+                                </div>
+                                <span class="cc-arrow">→</span>
+                            </a>
+                            <a href="https://ads.tiktok.com/business/creativecenter/inspiration/topads/pc/en?period=30&region=JP"
+                                target="_blank" class="cc-card">
+                                <div class="cc-icon">🏆</div>
+                                <div class="cc-info">
+                                    <div class="cc-name">Top Ads</div>
+                                    <div class="cc-desc">高パフォーマンス広告を業種・国別に一覧。PR投稿の参考に。</div>
+                                </div>
+                                <span class="cc-arrow">→</span>
+                            </a>
+                            <a href="https://ads.tiktok.com/business/creativecenter/inspiration/trends/pc/en"
+                                target="_blank" class="cc-card">
+                                <div class="cc-icon">📈</div>
+                                <div class="cc-info">
+                                    <div class="cc-name">Trends</div>
+                                    <div class="cc-desc">トレンドのハッシュタグ・楽曲・クリエイター。旬のネタ探しに。</div>
+                                </div>
+                                <span class="cc-arrow">→</span>
+                            </a>
+                        </div>
+                        <div class="cc-tip">💡 <strong>使い方：</strong>Creative
+                            Centerでバズ投稿を見つけたら、TikTokでその投稿を開きURLをコピー。下のStep 2に貼り付けてください。</div>
+                    </div>
+
+                    <!-- Step 2: 分析 -->
+                    <div class="research-step">
+                        <div class="step-header">
+                            <span class="step-number">2</span>
+                            <div>
+                                <h2 class="step-title">一括分析</h2>
+                                <p class="step-desc">URLをまとめて貼り付け → 自動でデータ取得・KPI比較</p>
                             </div>
                         </div>
-                        <div class="research-row">
-                            <button class="main-gen-btn research-btn" onclick="runResearch()">
-                                <span class="btn-icon">🔍</span> 競合投稿を検索
-                            </button>
+                        <div class="batch-form">
+                            <textarea id="batchUrls" class="batch-textarea" rows="6"
+                                placeholder="TikTokのURLを1行に1つずつ貼り付け（最大10件）&#10;&#10;例:&#10;https://www.tiktok.com/@user1/video/123456&#10;https://www.tiktok.com/@user2/video/789012"></textarea>
+                            <div class="batch-actions">
+                                <span class="batch-count" id="batchCount">0 / 10 件</span>
+                                <button class="main-gen-btn" onclick="runBatchAnalysis()">
+                                    <span class="btn-icon">⚡</span> 一括分析スタート
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    <div id="researchStatus" class="analyzer-status" style="display:none;">
+                    <div id="batchStatus" class="analyzer-status" style="display:none;">
                         <div class="spinner"></div>
-                        <span id="researchStatusText">TikTok投稿を収集中...</span>
+                        <span id="batchStatusText">投稿データを取得中...</span>
                     </div>
 
-                    <div id="researchSummary" class="research-summary" style="display:none;"></div>
-
-                    <div id="researchResults" class="research-results">
-                        <!-- Results cards will be injected here -->
-                    </div>
+                    <div id="batchResults" class="batch-results"></div>
                 </div>
             </div>
         </main>
