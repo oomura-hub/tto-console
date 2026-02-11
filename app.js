@@ -144,15 +144,39 @@ function generateLegacyStructure(fmt, container) {
 
 // 共通フォーマット関数
 function formatAiText(text) {
-    return text
-        .replace(/\&/g, '&amp;')
+    // 1. まずリンク系を先に処理（HTMLエスケープ前に）
+    // Markdownリンク [text](url) → プレースホルダー
+    const links = [];
+    text = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, (_, label, url) => {
+        links.push(`<a href="${url}" target="_blank" rel="noopener" class="ai-link">${label}</a>`);
+        return `%%LINK${links.length - 1}%%`;
+    });
+    // 裸のURL → プレースホルダー
+    text = text.replace(/(https?:\/\/[^\s<>"'）\)]+)/g, (url) => {
+        links.push(`<a href="${url}" target="_blank" rel="noopener" class="ai-link">${url}</a>`);
+        return `%%LINK${links.length - 1}%%`;
+    });
+
+    // 2. HTMLエスケープ
+    text = text
+        .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
+        .replace(/>/g, '&gt;');
+
+    // 3. テキスト装飾
+    text = text
         .replace(/\n\n/g, '<br><br>')
         .replace(/\n/g, '<br>')
         .replace(/「/g, '<b>「')
         .replace(/」/g, '」</b>')
         .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+
+    // 4. リンクのプレースホルダーを復元
+    links.forEach((link, i) => {
+        text = text.replace(`%%LINK${i}%%`, link);
+    });
+
+    return text;
 }
 
 async function callChatAPI(model, messages, webSearch = false) {
@@ -435,7 +459,7 @@ TikTok Organic（TTO）の専門家として回答してください。
 ${manualText}
 
 【ルール】
-Markdown記法は禁止。箇条書きは「・」を使用。日本語で回答。${isWebSearch ? '\nWeb検索結果が提供された場合、それを踏まえて最新情報に基づいて回答してください。出典URLがあれば明記してください。' : ''}`;
+箇条書きは「・」を使用。日本語で回答。参考URLがある場合は必ずリンクを含めてください。Markdownリンク形式 [サイト名](URL) での記載を推奨します。${isWebSearch ? '\nWeb検索結果が提供された場合、それを踏まえて最新かつ正確な情報に基づいて回答してください。必ず出典元のURLリンクを含めてください。' : ''}`;
 
             const messages = [{ role: 'system', content: systemPrompt }, ...conversationHistory];
             const result = await callChatAPI(model, messages, isWebSearch);
