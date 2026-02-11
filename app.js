@@ -271,22 +271,16 @@ function initMemo() {
 
 // ------- AI Chat -------
 const AI_MODELS = {
-    // --- Stable Models ---
-    'openai/gpt-4o': { name: 'GPT-4o', provider: 'OpenAI' },
-    'openai/gpt-4o-mini': { name: 'GPT-4o Mini', provider: 'OpenAI' },
+    // --- Stable & High-Performance Models ---
+    'openai/gpt-4o': { name: 'GPT-4o (OpenAI)', provider: 'OpenAI' },
+    'openai/o1': { name: 'OpenAI o1 (Hard Reasoning)', provider: 'OpenAI' },
     'anthropic/claude-3.5-sonnet': { name: 'Claude 3.5 Sonnet', provider: 'Anthropic' },
+    'anthropic/claude-3-opus': { name: 'Claude 3 Opus (Most Intelligent)', provider: 'Anthropic' },
     'google/gemini-2.0-flash-001': { name: 'Gemini 2.0 Flash', provider: 'Google' },
+    'google/gemini-2.0-flash-thinking-exp': { name: 'Gemini 2.0 Flash Thinking (Advanced Reasoning)', provider: 'Google' },
     'deepseek/deepseek-chat': { name: 'DeepSeek V3', provider: 'DeepSeek' },
-
-    // --- Frontier / Future Models ---
-    'google/gemini-3-pro-high': { name: 'Gemini 3 Pro (High)', provider: 'Google' },
-    'google/gemini-3-pro-low': { name: 'Gemini 3 Pro (Low)', provider: 'Google' },
-    'google/gemini-3-flash': { name: 'Gemini 3 Flash', provider: 'Google' },
-    'anthropic/claude-4.5-sonnet': { name: 'Claude Sonnet 4.5', provider: 'Anthropic' },
-    'anthropic/claude-4.5-sonnet:thinking': { name: 'Claude Sonnet 4.5 (Thinking)', provider: 'Anthropic' },
-    'anthropic/claude-4.5-opus:thinking': { name: 'Claude Opus 4.5 (Thinking)', provider: 'Anthropic' },
-    'anthropic/claude-4.6-opus:thinking': { name: 'Claude Opus 4.6 (Thinking)', provider: 'Anthropic' },
-    'openai/gpt-oss-120b:medium': { name: 'GPT-OSS 120B (Medium)', provider: 'OpenAI' }
+    'deepseek/deepseek-reasoner': { name: 'DeepSeek R1 (Reasoning)', provider: 'DeepSeek' },
+    'meta-llama/llama-3.3-70b-instruct': { name: 'Llama 3.3 70B (High Speed)', provider: 'Meta' }
 };
 
 function initChat() {
