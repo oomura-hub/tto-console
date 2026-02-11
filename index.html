@@ -153,6 +153,15 @@
                         </select>
                     </div>
                     <div class="chat-input-bottom">
+                        <button class="web-search-toggle" id="webSearchToggle" onclick="toggleWebSearch()"
+                            title="Web検索を有効にする">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <span class="web-search-label">Web</span>
+                        </button>
                         <textarea class="chat-input" id="chatInput" placeholder="質問を入力..." rows="1"></textarea>
                         <button class="send-btn" id="sendBtn">
                             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
@@ -177,7 +186,7 @@
 
     <script src="manual-data.js"></script>
     <script src="generator-data.js"></script>
-    <script src="app.js?v=6"></script>
+    <script src="app.js?v=7"></script>
 </body>
 
 </html>

@@ -847,6 +847,71 @@ body {
     transform: scale(1.06);
 }
 
+/* Web Search Toggle */
+.web-search-toggle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    color: var(--text-dim);
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.web-search-toggle:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.web-search-toggle.active {
+    color: #fff;
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(99, 102, 241, 0.2));
+    border-color: var(--accent);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.2), inset 0 0 8px rgba(56, 189, 248, 0.1);
+}
+
+.web-search-toggle.active svg {
+    stroke: var(--accent);
+    filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.5));
+}
+
+.web-search-toggle.active .web-search-label {
+    color: var(--accent);
+}
+
+.web-search-label {
+    letter-spacing: 0.5px;
+}
+
+/* Web search indicator in messages */
+.web-search-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 10px;
+    font-size: 0.68rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.web-search-badge svg {
+    width: 10px;
+    height: 10px;
+}
+
 /* Memo */
 .memo-header {
     padding: 16px 20px;

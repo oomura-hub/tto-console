@@ -73,7 +73,7 @@ URL: ${url}
 2. その分析に基づき、マニュアルの「黄金の8枚構成」や「勝ちパターン」を適用した新しい構成案を3パターン（Pattern A, B, C）作成してください。
 3. インターン生が「なぜこの構成がマニュアル的に正しいのか」を学べるよう、解説を含めてください。`;
 
-            const response = await callChatAPI('openai/gpt-4o', [
+            const response = await callChatAPI('openai/gpt-5.2-pro', [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: prompt }
             ]);
@@ -155,7 +155,7 @@ function formatAiText(text) {
         .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
 }
 
-async function callChatAPI(model, messages) {
+async function callChatAPI(model, messages, webSearch = false) {
     const API_BASE = 'https://tto-console-api-293189845667.asia-northeast1.run.app';
     const res = await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
@@ -166,13 +166,32 @@ async function callChatAPI(model, messages) {
             model: model,
             messages: messages,
             temperature: 0.7,
-            max_tokens: 3500
+            max_tokens: 3500,
+            webSearch: webSearch
         })
     });
 
     const data = await res.json();
     if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
     return data.choices?.[0]?.message?.content || '';
+}
+
+// ------- Web検索トグル -------
+let webSearchEnabled = false;
+
+function toggleWebSearch() {
+    webSearchEnabled = !webSearchEnabled;
+    const btn = document.getElementById('webSearchToggle');
+    const chatInput = document.getElementById('chatInput');
+    if (btn) {
+        btn.classList.toggle('active', webSearchEnabled);
+        btn.title = webSearchEnabled ? 'Web検索: ON（クリックでOFF）' : 'Web検索を有効にする';
+    }
+    if (chatInput) {
+        chatInput.placeholder = webSearchEnabled
+            ? '🔍 Web検索ON — 最新情報を検索して回答します...'
+            : '質問を入力...';
+    }
 }
 
 // ------- マニュアル -------
@@ -271,22 +290,24 @@ function initMemo() {
 
 // ------- AI Chat -------
 const AI_MODELS = {
-    // --- Stable & High-Performance Models ---
-    'openai/gpt-4o': { name: 'GPT-4o (Standard)', provider: 'OpenAI' },
-    'openai/o1': { name: 'OpenAI o1 (Reasoning)', provider: 'OpenAI' },
-    'anthropic/claude-3.5-sonnet': { name: 'Claude 3.5 Sonnet', provider: 'Anthropic' },
-    'google/gemini-2.0-flash-001': { name: 'Gemini 2.0 Flash', provider: 'Google' },
-    'deepseek/deepseek-chat': { name: 'DeepSeek V3', provider: 'DeepSeek' },
-
-    // --- Verified Futuristic Models (OpenRouter 2026 List) ---
-    'google/gemini-3-pro-preview': { name: 'Gemini 3 Pro Preview', provider: 'Google' },
-    'google/gemini-3-flash-preview': { name: 'Gemini 3 Flash Preview', provider: 'Google' },
-    'anthropic/claude-opus-4.6': { name: 'Claude Opus 4.6 (Next-Gen)', provider: 'Anthropic' },
+    // --- 🏆 2026 NEW FRONTIERS (ULTRA PERFORMANCE) ---
+    'openrouter/pony-alpha': { name: 'Pony Alpha (SOTA reasoning/Coding)', provider: 'OpenRouter' },
+    'openai/gpt-5.3-codex-preview': { name: 'GPT-5.3 Codex Preview', provider: 'OpenAI' },
+    'openai/gpt-5.2-pro': { name: 'GPT-5.2 Pro (High reliability)', provider: 'OpenAI' },
+    'anthropic/claude-opus-4.6': { name: 'Claude Opus 4.6 (Intelligence King)', provider: 'Anthropic' },
     'anthropic/claude-sonnet-4.5': { name: 'Claude Sonnet 4.5', provider: 'Anthropic' },
-    'openai/gpt-5-nano': { name: 'GPT-5 Nano', provider: 'OpenAI' },
-    'openai/gpt-oss-120b': { name: 'GPT-OSS 120B', provider: 'OpenAI' },
-    'deepseek/deepseek-v3.2': { name: 'DeepSeek V3.2', provider: 'DeepSeek' },
-    'qwen/qwen3-max-thinking': { name: 'Qwen 3 Max (Thinking)', provider: 'Alibaba' }
+
+    // --- ⚡ LATEST EFFICIENCY & SPECIALIZED ---
+    'google/gemini-3-pro-preview': { name: 'Gemini 3 Pro Preview (1M Context)', provider: 'Google' },
+    'google/gemini-3-flash-preview': { name: 'Gemini 3 Flash Preview', provider: 'Google' },
+    'deepseek/deepseek-v3.2': { name: 'DeepSeek V3.2 (Value King)', provider: 'DeepSeek' },
+    'qwen/qwen3-max-thinking': { name: 'Qwen 3 Max (Thinking MoE)', provider: 'Alibaba' },
+    'qwen/qwen3-coder-next': { name: 'Qwen 3 Coder Next', provider: 'Alibaba' },
+
+    // --- 🚀 LEGACY FRONTIERS (FOR COMPARISON) ---
+    'openai/o1': { name: 'OpenAI o1 (Original Reasoning)', provider: 'OpenAI' },
+    'anthropic/claude-3.5-sonnet': { name: 'Claude 3.5 Sonnet', provider: 'Anthropic' },
+    'google/gemini-2.0-flash-001': { name: 'Gemini 2.0 Flash', provider: 'Google' }
 };
 
 function initChat() {
@@ -301,18 +322,36 @@ function initChat() {
             html += `<option value="${id}">${info.name}</option>`;
         }
         modelSelector.innerHTML = html;
-        modelSelector.value = 'openai/gpt-4o'; // デフォルトをより強力なモデルに
+        modelSelector.value = 'openai/gpt-5.2-pro'; // 2026年現在の最強モデルをデフォルトに
     }
 
     let conversationHistory = [];
 
-    function addMessage(text, isAi) {
+    function addMessage(text, isAi, options = {}) {
         const div = document.createElement('div');
         div.classList.add('message', isAi ? 'ai-message' : 'user-message');
+
+        if (isAi && options.webSearch) {
+            const badge = document.createElement('div');
+            badge.classList.add('web-search-badge');
+            badge.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Web検索結果を含む回答`;
+            div.appendChild(badge);
+        }
+
         if (isAi) {
-            div.innerHTML = formatAiText(text);
+            const contentDiv = document.createElement('div');
+            contentDiv.innerHTML = formatAiText(text);
+            div.appendChild(contentDiv);
         } else {
-            div.textContent = text;
+            if (options.webSearch) {
+                const badge = document.createElement('span');
+                badge.classList.add('web-search-badge');
+                badge.innerHTML = `🔍 Web`;
+                badge.style.marginRight = '6px';
+                div.appendChild(badge);
+            }
+            const textNode = document.createTextNode(text);
+            div.appendChild(textNode);
         }
         chatMessages.appendChild(div);
         chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
@@ -320,10 +359,11 @@ function initChat() {
 
     async function handleSend() {
         const text = chatInput.value.trim();
-        const model = modelSelector?.value || 'openai/gpt-4o-mini';
+        const model = modelSelector?.value || 'openai/gpt-5-mini';
+        const isWebSearch = webSearchEnabled;
         if (!text) return;
 
-        addMessage(text, false);
+        addMessage(text, false, { webSearch: isWebSearch });
         chatInput.value = '';
         chatInput.style.height = 'auto';
 
@@ -332,8 +372,11 @@ function initChat() {
         const thinking = document.createElement('div');
         thinking.classList.add('message', 'ai-message');
         thinking.id = 'thinking';
-        thinking.textContent = `思考中...`;
+        thinking.innerHTML = isWebSearch
+            ? `<div class="web-search-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Web検索中...</div>検索結果を分析しています...`
+            : `思考中...`;
         chatMessages.appendChild(thinking);
+        chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
 
         try {
             const manualText = getManualText();
@@ -344,13 +387,13 @@ TikTok Organic（TTO）の専門家として回答してください。
 ${manualText}
 
 【ルール】
-Markdown記法は禁止。箇条書きは「・」を使用。日本語で回答。`;
+Markdown記法は禁止。箇条書きは「・」を使用。日本語で回答。${isWebSearch ? '\nWeb検索結果が提供された場合、それを踏まえて最新情報に基づいて回答してください。出典URLがあれば明記してください。' : ''}`;
 
             const messages = [{ role: 'system', content: systemPrompt }, ...conversationHistory];
-            const response = await callChatAPI(model, messages);
+            const response = await callChatAPI(model, messages, isWebSearch);
 
             if (document.getElementById('thinking')) document.getElementById('thinking').remove();
-            addMessage(response, true);
+            addMessage(response, true, { webSearch: isWebSearch });
             conversationHistory.push({ role: 'assistant', content: response });
             if (conversationHistory.length > 20) conversationHistory = conversationHistory.slice(-16);
         } catch (e) {
