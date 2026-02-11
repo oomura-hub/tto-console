@@ -271,11 +271,22 @@ function initMemo() {
 
 // ------- AI Chat -------
 const AI_MODELS = {
+    // --- Stable Models ---
     'openai/gpt-4o': { name: 'GPT-4o', provider: 'OpenAI' },
     'openai/gpt-4o-mini': { name: 'GPT-4o Mini', provider: 'OpenAI' },
     'anthropic/claude-3.5-sonnet': { name: 'Claude 3.5 Sonnet', provider: 'Anthropic' },
     'google/gemini-2.0-flash-001': { name: 'Gemini 2.0 Flash', provider: 'Google' },
-    'deepseek/deepseek-chat': { name: 'DeepSeek V3', provider: 'DeepSeek' }
+    'deepseek/deepseek-chat': { name: 'DeepSeek V3', provider: 'DeepSeek' },
+
+    // --- Frontier / Future Models ---
+    'google/gemini-3-pro-high': { name: 'Gemini 3 Pro (High)', provider: 'Google' },
+    'google/gemini-3-pro-low': { name: 'Gemini 3 Pro (Low)', provider: 'Google' },
+    'google/gemini-3-flash': { name: 'Gemini 3 Flash', provider: 'Google' },
+    'anthropic/claude-4.5-sonnet': { name: 'Claude Sonnet 4.5', provider: 'Anthropic' },
+    'anthropic/claude-4.5-sonnet:thinking': { name: 'Claude Sonnet 4.5 (Thinking)', provider: 'Anthropic' },
+    'anthropic/claude-4.5-opus:thinking': { name: 'Claude Opus 4.5 (Thinking)', provider: 'Anthropic' },
+    'anthropic/claude-4.6-opus:thinking': { name: 'Claude Opus 4.6 (Thinking)', provider: 'Anthropic' },
+    'openai/gpt-oss-120b:medium': { name: 'GPT-OSS 120B (Medium)', provider: 'OpenAI' }
 };
 
 function initChat() {
@@ -290,7 +301,7 @@ function initChat() {
             html += `<option value="${id}">${info.name}</option>`;
         }
         modelSelector.innerHTML = html;
-        modelSelector.value = 'openai/gpt-4o-mini';
+        modelSelector.value = 'openai/gpt-4o'; // デフォルトをより強力なモデルに
     }
 
     let conversationHistory = [];
