@@ -73,11 +73,11 @@ URL: ${url}
 2. その分析に基づき、マニュアルの「黄金の8枚構成」や「勝ちパターン」を適用した新しい構成案を3パターン（Pattern A, B, C）作成してください。
 3. インターン生が「なぜこの構成がマニュアル的に正しいのか」を学べるよう、解説を含めてください。`;
 
-            const response = await callChatAPI('openai/gpt-5.2-pro', [
+            const result2 = await callChatAPI('openai/gpt-5.2-pro', [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: prompt }
             ]);
-            renderUnifiedResults(response, result);
+            renderUnifiedResults(result2.content, result);
         } else {
             // URLがない場合は従来のテンプレート生成（簡易版）
             await new Promise(r => setTimeout(r, 800)); // 演出用
@@ -173,7 +173,12 @@ async function callChatAPI(model, messages, webSearch = false) {
 
     const data = await res.json();
     if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
-    return data.choices?.[0]?.message?.content || '';
+
+    const msg = data.choices?.[0]?.message;
+    return {
+        content: msg?.content || '',
+        annotations: msg?.annotations || []
+    };
 }
 
 // ------- Web検索トグル -------
@@ -342,6 +347,32 @@ function initChat() {
             const contentDiv = document.createElement('div');
             contentDiv.innerHTML = formatAiText(text);
             div.appendChild(contentDiv);
+
+            // 出典リンク（annotations）の表示
+            if (options.annotations && options.annotations.length > 0) {
+                const sourcesDiv = document.createElement('div');
+                sourcesDiv.classList.add('web-sources');
+                sourcesDiv.innerHTML = '<div class="web-sources-title">📎 出典</div>';
+
+                const seen = new Set();
+                options.annotations.forEach(ann => {
+                    if (ann.type === 'url_citation' && ann.url_citation) {
+                        const url = ann.url_citation.url;
+                        if (seen.has(url)) return;
+                        seen.add(url);
+                        const domain = new URL(url).hostname.replace('www.', '');
+                        const title = ann.url_citation.title || domain;
+                        const link = document.createElement('a');
+                        link.classList.add('web-source-link');
+                        link.href = url;
+                        link.target = '_blank';
+                        link.rel = 'noopener';
+                        link.innerHTML = `<span class="web-source-domain">${domain}</span><span class="web-source-title">${title}</span>`;
+                        sourcesDiv.appendChild(link);
+                    }
+                });
+                if (seen.size > 0) div.appendChild(sourcesDiv);
+            }
         } else {
             if (options.webSearch) {
                 const badge = document.createElement('span');
@@ -374,11 +405,10 @@ function initChat() {
         thinking.id = 'thinking';
 
         if (isWebSearch) {
-            thinking.innerHTML = `<div class="web-search-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Web検索中...</div><span class="thinking-step">🔍 Googleで検索しています...</span>`;
+            thinking.innerHTML = `<div class="web-search-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Web検索中...</div><span class="thinking-step">🔍 検索しています...</span>`;
             const steps = [
-                '🔍 Googleで検索しています...',
-                '📄 上位サイトのページを読み込み中...',
-                '🧠 取得した情報を分析しています...',
+                '🔍 検索しています...',
+                '🧠 検索結果を分析中...',
                 '✍️ 回答を生成しています...'
             ];
             let stepIdx = 0;
@@ -387,7 +417,7 @@ function initChat() {
                 const stepEl = thinking.querySelector('.thinking-step');
                 if (stepEl) stepEl.textContent = steps[stepIdx];
                 else clearInterval(stepInterval);
-            }, 2500);
+            }, 3000);
             thinking._stepInterval = stepInterval;
         } else {
             thinking.textContent = '思考中...';
@@ -408,12 +438,12 @@ ${manualText}
 Markdown記法は禁止。箇条書きは「・」を使用。日本語で回答。${isWebSearch ? '\nWeb検索結果が提供された場合、それを踏まえて最新情報に基づいて回答してください。出典URLがあれば明記してください。' : ''}`;
 
             const messages = [{ role: 'system', content: systemPrompt }, ...conversationHistory];
-            const response = await callChatAPI(model, messages, isWebSearch);
+            const result = await callChatAPI(model, messages, isWebSearch);
 
             const thinkingEl = document.getElementById('thinking');
             if (thinkingEl) { if (thinkingEl._stepInterval) clearInterval(thinkingEl._stepInterval); thinkingEl.remove(); }
-            addMessage(response, true, { webSearch: isWebSearch });
-            conversationHistory.push({ role: 'assistant', content: response });
+            addMessage(result.content, true, { webSearch: isWebSearch, annotations: result.annotations });
+            conversationHistory.push({ role: 'assistant', content: result.content });
             if (conversationHistory.length > 20) conversationHistory = conversationHistory.slice(-16);
         } catch (e) {
             const thinkingEl2 = document.getElementById('thinking');
