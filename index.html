@@ -44,11 +44,11 @@
                         <p>FMTを選ぶだけで8枚構成の投稿案を自動生成。点数診断、二項対立、ランキング形式に対応。</p>
                         <span class="dash-link">開く →</span>
                     </div>
-                    <div class="dash-card dash-disabled">
+                    <div class="dash-card" onclick="navigateTo('generator')">
                         <div class="dash-icon">🔍</div>
                         <h2>競合アナライザー</h2>
-                        <p>バズ投稿のURL分析と転用アイデア生成。Apifyベースでリニューアル予定。</p>
-                        <span class="dash-link dash-coming">準備中</span>
+                        <p>バズ投稿のURL分析から構成案を生成。プロの視点で動画を解剖します。</p>
+                        <span class="dash-link">開く →</span>
                     </div>
                     <div class="dash-card dash-stats">
                         <div class="dash-icon">📚</div>
@@ -84,20 +84,41 @@
                 </div>
             </div>
 
-            <!-- ===== Generator Page ===== -->
+            <!-- ===== Structure Generator Page (Merged with Analyzer) ===== -->
             <div class="page" id="page-generator" style="display:none;">
                 <div class="generator-wrapper">
                     <h1 class="page-title">構成案ジェネレーター</h1>
-                    <p class="page-subtitle">FMTを選択して8枚構成の投稿案を生成します</p>
-                    <div class="gen-controls">
-                        <select id="fmtSelector" class="gen-select">
-                            <option value="score">点数診断系</option>
-                            <option value="binary">二項対立</option>
-                            <option value="ranking">ランキング形式</option>
-                        </select>
-                        <button class="gen-btn" onclick="generateStructure()">生成する</button>
+                    <p class="page-subtitle">参考動画のURLから「バズの構造」を分析し、3パターンの構成案を作成します</p>
+
+                    <div class="gen-input-card">
+                        <div class="input-label">参考動画のURL <span class="badge">推奨</span></div>
+                        <input type="text" id="videoUrlUnified" class="gen-input-field"
+                            placeholder="TikTok等のバズ投稿URLを入力...">
+
+                        <div class="input-row">
+                            <div class="input-col">
+                                <div class="input-label">出力形式 (FMT)</div>
+                                <select id="fmtSelectorUnified" class="gen-select-field">
+                                    <option value="auto">自動（動画構成から最適化）</option>
+                                    <option value="score">点数診断系</option>
+                                    <option value="binary">二項対立</option>
+                                    <option value="ranking">ランキング形式</option>
+                                </select>
+                            </div>
+                            <button class="main-gen-btn" onclick="runGenerator()">
+                                <span class="btn-icon">⚡</span> 分析 & 構成生成
+                            </button>
+                        </div>
                     </div>
-                    <div id="genResult" class="gen-result"></div>
+
+                    <div id="unifiedGenStatus" class="analyzer-status" style="display:none;">
+                        <div class="spinner"></div>
+                        <span id="unifiedStatusText">動画を分析中...</span>
+                    </div>
+
+                    <div id="unifiedGenResult" class="gen-result">
+                        <!-- Results will be injected here -->
+                    </div>
                 </div>
             </div>
         </main>
@@ -156,7 +177,7 @@
 
     <script src="manual-data.js"></script>
     <script src="generator-data.js"></script>
-    <script src="app.js?v=3"></script>
+    <script src="app.js?v=4"></script>
 </body>
 
 </html>

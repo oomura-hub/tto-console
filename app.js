@@ -19,10 +19,131 @@ function navigateTo(page) {
     }
 }
 
-// ------- マニュアル -------
-function initManual() {
-    const nav = document.getElementById('manualNav');
-    const content = document.getElementById('manualContent');
+// ------- 構成案ジェネレーター (分析統合版) -------
+async function runGenerator() {
+    const url = document.getElementById('videoUrlUnified').value.trim();
+    const fmt = document.getElementById('fmtSelectorUnified').value;
+    const status = document.getElementById('unifiedGenStatus');
+    const result = document.getElementById('unifiedGenResult');
+    const statusText = document.getElementById('unifiedStatusText');
+
+    if (!url && fmt === 'auto') {
+        alert('URLを入力するか、出力形式(FMT)を選択してください。');
+        return;
+    }
+
+    status.style.display = 'flex';
+    result.innerHTML = ''; // クリア
+    statusText.textContent = url ? 'バズ動画を分析中...' : '構成案を生成中...';
+
+    try {
+        if (url) {
+            // URLがある場合はAI分析モード
+            const prompt = `@web 以下の動画URLの内容を読み込み、バズの要因を解剖した上で構成案を作成してください。
+URL: ${url}
+指定FMT: ${fmt === 'auto' ? '動画に最適な形式' : fmt}
+
+【分析と構成の指示】
+1. まず、動画の構成（1枚目タイトル、各スライドのトピック、画像案、背景など）を詳しく文字起こし・分析してください。
+2. その分析に基づき、プロのマーケターとして「横展開」可能な新しい構成案を3パターン（Pattern A, B, C）作成してください。
+3. インターン生が「なぜこの構成が良いのか」を学べるよう、解説を含めてください。`;
+
+            const response = await callChatAPI('openai/gpt-4o', [{ role: 'user', content: prompt }]);
+            renderUnifiedResults(response, result);
+        } else {
+            // URLがない場合は従来のテンプレート生成（簡易版）
+            await new Promise(r => setTimeout(r, 800)); // 演出用
+            generateLegacyStructure(fmt, result);
+        }
+    } catch (e) {
+        console.error('Generator Error:', e);
+        alert('生成中にエラーが発生しました: ' + e.message);
+    } finally {
+        status.style.display = 'none';
+    }
+}
+
+function renderUnifiedResults(rawText, container) {
+    const sections = rawText.split(/(?=Pattern A|Pattern B|Pattern C|【パターン|【構成案)/i);
+    const analysis = sections[0];
+    const patterns = sections.slice(1);
+
+    let html = `
+        <div class="analysis-result-section">
+            <h3 class="section-title">🔍 バズ投稿の解剖結果</h3>
+            <div class="analysis-card">
+                <div class="proposal-content">${formatAiText(analysis)}</div>
+            </div>
+        </div>
+        
+        <div class="proposal-header">
+            <h3 class="section-title">💡 転用構成案（3パターン）</h3>
+        </div>
+        <div class="proposal-grid">
+            ${patterns.map((p, i) => `
+                <div class="proposal-card">
+                    <span class="proposal-tag">PATTERN ${String.fromCharCode(65 + i)}</span>
+                    <div class="proposal-content">${formatAiText(p)}</div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    container.innerHTML = html;
+}
+
+function generateLegacyStructure(fmt, container) {
+    const template = GENERATOR_TEMPLATES[fmt];
+    if (!template) return;
+
+    let html = `<div class="analysis-result-section">
+        <h3 class="section-title">✨ ${template.name}の基本構成</h3>
+        <div class="gen-analysis">${template.analysis}</div>
+    </div>
+    <div class="proposal-grid" style="margin-top:20px">`;
+
+    template.slides.forEach((slide, i) => {
+        html += `<div class="gen-card" style="animation-delay: ${i * 0.05}s; width:100%; grid-column: span 1">
+            <div class="gen-card-num">SLIDE ${slide.num}</div>
+            <div class="gen-card-role">${slide.role}</div>
+            <div class="gen-card-title">${slide.title}</div>
+            <div class="gen-card-reason">${slide.reason}</div>
+            <div class="gen-card-img">📷 ${slide.img}</div>
+        </div>`;
+    });
+    html += `</div>`;
+    container.innerHTML = html;
+}
+
+// 共通フォーマット関数
+function formatAiText(text) {
+    // 不要な記号の削除や強調の置換
+    return text
+        .replace(/\&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n/g, '<br>')
+        .replace(/「/g, '<b>「')
+        .replace(/」/g, '」</b>')
+        .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+}
+
+async function callChatAPI(model, messages) {
+    const res = await fetch(`${API_BASE}/api/chat`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            model: model,
+            messages: messages,
+            temperature: 0.7,
+            max_tokens: 3500
+        })
+    });
+
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
     if (!nav || !content) return;
 
     let navHTML = '';
