@@ -19,6 +19,19 @@ function navigateTo(page) {
     }
 }
 
+// 共通マニュアルテキスト取得関数
+function getManualText() {
+    let text = '';
+    if (typeof MANUAL_DATA !== 'undefined') {
+        MANUAL_DATA.forEach(ch => ch.sections.forEach(sec => {
+            const tmp = document.createElement('div');
+            tmp.innerHTML = sec.html;
+            text += tmp.innerText + '\n';
+        }));
+    }
+    return text.slice(0, 10000);
+}
+
 // ------- 構成案ジェネレーター (分析統合版) -------
 async function runGenerator() {
     const url = document.getElementById('videoUrlUnified').value.trim();
@@ -37,18 +50,33 @@ async function runGenerator() {
     statusText.textContent = url ? 'バズ動画を分析中...' : '構成案を生成中...';
 
     try {
+        const manualContext = getManualText();
+        const systemPrompt = `あなたはSOCIAL GREEN TECH社のTTO（TikTok Organic）専門マーケターです。
+以下のマニュアル内容を「絶対的な基準」として、動画分析と構成案作成を行ってください。
+
+【SGT TTOマニュアル】
+${manualContext}
+
+【最重要ルール】
+- 1枚目の「指を止める」画像選定の基準を遵守すること。
+- 2枚目の「常識の破壊・物議」のロジックが組み込まれているか厳しくチェックすること。
+- 提案する3つのパターンは、すべてこのマニュアルの「勝ちパターン」に沿ったものにすること。`;
+
         if (url) {
             // URLがある場合はAI分析モード
-            const prompt = `@web 以下の動画URLの内容を読み込み、バズの要因を解剖した上で構成案を作成してください。
+            const prompt = `以下の動画URLの内容を読み込み、弊社のTTOマニュアルに照らし合わせてバズの要因を解剖し、新しい構成案を作成してください。
 URL: ${url}
 指定FMT: ${fmt === 'auto' ? '動画に最適な形式' : fmt}
 
-【分析と構成の指示】
-1. まず、動画の構成（1枚目タイトル、各スライドのトピック、画像案、背景など）を詳しく文字起こし・分析してください。
-2. その分析に基づき、プロのマーケターとして「横展開」可能な新しい構成案を3パターン（Pattern A, B, C）作成してください。
-3. インターン生が「なぜこの構成が良いのか」を学べるよう、解説を含めてください。`;
+【指示】
+1. SGT式TTOの視点で、動画の構成（1枚目〜最後）を詳しく分析・言語化してください。
+2. その分析に基づき、マニュアルの「黄金の8枚構成」や「勝ちパターン」を適用した新しい構成案を3パターン（Pattern A, B, C）作成してください。
+3. インターン生が「なぜこの構成がマニュアル的に正しいのか」を学べるよう、解説を含めてください。`;
 
-            const response = await callChatAPI('openai/gpt-4o', [{ role: 'user', content: prompt }]);
+            const response = await callChatAPI('openai/gpt-4o', [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: prompt }
+            ]);
             renderUnifiedResults(response, result);
         } else {
             // URLがない場合は従来のテンプレート生成（簡易版）
@@ -318,18 +346,6 @@ Markdown記法は禁止。箇条書きは「・」を使用。日本語で回答
             if (document.getElementById('thinking')) document.getElementById('thinking').remove();
             addMessage(`エラー: ${e.message}`, true);
         }
-    }
-
-    function getManualText() {
-        let text = '';
-        if (typeof MANUAL_DATA !== 'undefined') {
-            MANUAL_DATA.forEach(ch => ch.sections.forEach(sec => {
-                const tmp = document.createElement('div');
-                tmp.innerHTML = sec.html;
-                text += tmp.innerText + '\n';
-            }));
-        }
-        return text.slice(0, 10000);
     }
 
     sendBtn.addEventListener('click', handleSend);
