@@ -372,9 +372,27 @@ function initChat() {
         const thinking = document.createElement('div');
         thinking.classList.add('message', 'ai-message');
         thinking.id = 'thinking';
-        thinking.innerHTML = isWebSearch
-            ? `<div class="web-search-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Web検索中...</div>検索結果を分析しています...`
-            : `思考中...`;
+
+        if (isWebSearch) {
+            thinking.innerHTML = `<div class="web-search-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Web検索中...</div><span class="thinking-step">🔍 Googleで検索しています...</span>`;
+            const steps = [
+                '🔍 Googleで検索しています...',
+                '📄 上位サイトのページを読み込み中...',
+                '🧠 取得した情報を分析しています...',
+                '✍️ 回答を生成しています...'
+            ];
+            let stepIdx = 0;
+            const stepInterval = setInterval(() => {
+                stepIdx = Math.min(stepIdx + 1, steps.length - 1);
+                const stepEl = thinking.querySelector('.thinking-step');
+                if (stepEl) stepEl.textContent = steps[stepIdx];
+                else clearInterval(stepInterval);
+            }, 2500);
+            thinking._stepInterval = stepInterval;
+        } else {
+            thinking.textContent = '思考中...';
+        }
+
         chatMessages.appendChild(thinking);
         chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
 
@@ -392,12 +410,14 @@ Markdown記法は禁止。箇条書きは「・」を使用。日本語で回答
             const messages = [{ role: 'system', content: systemPrompt }, ...conversationHistory];
             const response = await callChatAPI(model, messages, isWebSearch);
 
-            if (document.getElementById('thinking')) document.getElementById('thinking').remove();
+            const thinkingEl = document.getElementById('thinking');
+            if (thinkingEl) { if (thinkingEl._stepInterval) clearInterval(thinkingEl._stepInterval); thinkingEl.remove(); }
             addMessage(response, true, { webSearch: isWebSearch });
             conversationHistory.push({ role: 'assistant', content: response });
             if (conversationHistory.length > 20) conversationHistory = conversationHistory.slice(-16);
         } catch (e) {
-            if (document.getElementById('thinking')) document.getElementById('thinking').remove();
+            const thinkingEl2 = document.getElementById('thinking');
+            if (thinkingEl2) { if (thinkingEl2._stepInterval) clearInterval(thinkingEl2._stepInterval); thinkingEl2.remove(); }
             addMessage(`エラー: ${e.message}`, true);
         }
     }

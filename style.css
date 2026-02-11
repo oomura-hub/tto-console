@@ -912,6 +912,14 @@ body {
     height: 10px;
 }
 
+.thinking-step {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    animation: fadeUp 0.3s ease-out;
+}
+
 /* Memo */
 .memo-header {
     padding: 16px 20px;
