@@ -1311,3 +1311,253 @@ body {
         transform: translateY(0);
     }
 }
+
+/* ===== Research Page ===== */
+.research-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 32px 24px;
+}
+
+.research-form {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.research-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    align-items: flex-end;
+}
+
+.research-row:last-child {
+    margin-bottom: 0;
+}
+
+.research-field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.research-field-wide {
+    flex: 3;
+}
+
+.research-label {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.research-btn {
+    width: 100%;
+    font-size: 1rem;
+    padding: 12px;
+}
+
+/* Summary Stats */
+.research-summary {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.3s ease-out;
+}
+
+.summary-stat {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    text-align: center;
+}
+
+.summary-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    color: var(--accent);
+    line-height: 1.2;
+}
+
+.summary-unit {
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.7;
+}
+
+.summary-label {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+    font-weight: 600;
+}
+
+/* Results Grid */
+.research-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+}
+
+.research-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.25s;
+    animation: fadeUp 0.3s ease-out;
+}
+
+.research-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(56, 189, 248, 0.12);
+}
+
+.rc-thumbnail {
+    width: 100%;
+    height: 160px;
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(255, 255, 255, 0.03);
+    position: relative;
+}
+
+.rc-type-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.65rem;
+    font-weight: 600;
+}
+
+.rc-body {
+    padding: 12px 14px;
+}
+
+.rc-author {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.rc-author-name {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.rc-date {
+    font-size: 0.62rem;
+    color: var(--text-dim);
+}
+
+.rc-caption {
+    font-size: 0.75rem;
+    color: var(--text);
+    line-height: 1.4;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.rc-stats {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+}
+
+.rc-stat {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    font-weight: 500;
+}
+
+.rc-kpis {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.rc-kpi {
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+}
+
+.rc-kpi.kpi-hot {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #f87171;
+}
+
+.rc-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.rc-tag {
+    font-size: 0.58rem;
+    color: var(--accent);
+    opacity: 0.6;
+    font-weight: 500;
+}
+
+/* Error & Empty states */
+.research-error,
+.research-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+
+.research-error {
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #f87171;
+}
+
+@media (max-width: 768px) {
+    .research-row {
+        flex-direction: column;
+    }
+
+    .research-summary {
+        flex-wrap: wrap;
+    }
+
+    .summary-stat {
+        flex: 1 1 45%;
+    }
+
+    .research-results {
+        grid-template-columns: 1fr;
+    }
+}

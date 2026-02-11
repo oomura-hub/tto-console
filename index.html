@@ -22,6 +22,7 @@
             <button class="header-tab active" data-page="dashboard" onclick="navigateTo('dashboard')">ダッシュボード</button>
             <button class="header-tab" data-page="manual" onclick="navigateTo('manual')">マニュアル</button>
             <button class="header-tab" data-page="generator" onclick="navigateTo('generator')">ジェネレーター</button>
+            <button class="header-tab" data-page="research" onclick="navigateTo('research')">リサーチ</button>
         </nav>
 
     </header>
@@ -44,10 +45,10 @@
                         <p>FMTを選ぶだけで8枚構成の投稿案を自動生成。点数診断、二項対立、ランキング形式に対応。</p>
                         <span class="dash-link">開く →</span>
                     </div>
-                    <div class="dash-card" onclick="navigateTo('generator')">
+                    <div class="dash-card" onclick="navigateTo('research')">
                         <div class="dash-icon">🔍</div>
-                        <h2>競合アナライザー</h2>
-                        <p>バズ投稿のURL分析から構成案を生成。プロの視点で動画を解剖します。</p>
+                        <h2>競合リサーチ</h2>
+                        <p>ハッシュタグ別にバズ投稿を自動収集。再生数・保存率・投稿形式で絞り込み、競合を丸裸にします。</p>
                         <span class="dash-link">開く →</span>
                     </div>
                     <div class="dash-card dash-stats">
@@ -121,6 +122,78 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ===== Research Page (TikTok競合リサーチ) ===== -->
+            <div class="page" id="page-research" style="display:none;">
+                <div class="research-wrapper">
+                    <h1 class="page-title">競合リサーチ</h1>
+                    <p class="page-subtitle">ハッシュタグからバズ投稿を自動収集・フィルタリング。競合の「勝ちパターン」を発見します。</p>
+
+                    <div class="research-form">
+                        <div class="research-row">
+                            <div class="research-field research-field-wide">
+                                <label class="research-label">ハッシュタグ <span class="badge">必須</span></label>
+                                <input type="text" id="researchHashtags" class="gen-input-field"
+                                    placeholder="例: KINUI, スキンケア, PR（カンマ区切りで複数可）">
+                            </div>
+                        </div>
+                        <div class="research-row">
+                            <div class="research-field">
+                                <label class="research-label">最低再生数</label>
+                                <select id="researchMinViews" class="gen-select-field">
+                                    <option value="10000">1万回以上</option>
+                                    <option value="50000">5万回以上</option>
+                                    <option value="100000" selected>10万回以上</option>
+                                    <option value="500000">50万回以上</option>
+                                    <option value="1000000">100万回以上</option>
+                                </select>
+                            </div>
+                            <div class="research-field">
+                                <label class="research-label">投稿形式</label>
+                                <select id="researchPostType" class="gen-select-field">
+                                    <option value="image">画像投稿のみ</option>
+                                    <option value="video">動画投稿のみ</option>
+                                    <option value="all">すべて</option>
+                                </select>
+                            </div>
+                            <div class="research-field">
+                                <label class="research-label">期間</label>
+                                <select id="researchPeriod" class="gen-select-field">
+                                    <option value="7">1週間以内</option>
+                                    <option value="30" selected>1ヶ月以内</option>
+                                    <option value="90">3ヶ月以内</option>
+                                    <option value="180">6ヶ月以内</option>
+                                    <option value="365">1年以内</option>
+                                </select>
+                            </div>
+                            <div class="research-field">
+                                <label class="research-label">取得件数</label>
+                                <select id="researchMaxResults" class="gen-select-field">
+                                    <option value="30">30件</option>
+                                    <option value="50" selected>50件</option>
+                                    <option value="100">100件</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="research-row">
+                            <button class="main-gen-btn research-btn" onclick="runResearch()">
+                                <span class="btn-icon">🔍</span> 競合投稿を検索
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="researchStatus" class="analyzer-status" style="display:none;">
+                        <div class="spinner"></div>
+                        <span id="researchStatusText">TikTok投稿を収集中...</span>
+                    </div>
+
+                    <div id="researchSummary" class="research-summary" style="display:none;"></div>
+
+                    <div id="researchResults" class="research-results">
+                        <!-- Results cards will be injected here -->
+                    </div>
+                </div>
+            </div>
         </main>
 
         <!-- Right Side Panel (AI Chat / Memo) -->
@@ -186,7 +259,7 @@
 
     <script src="manual-data.js"></script>
     <script src="generator-data.js"></script>
-    <script src="app.js?v=9"></script>
+    <script src="app.js?v=10"></script>
 </body>
 
 </html>

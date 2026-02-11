@@ -485,6 +485,136 @@ ${manualText}
     });
 }
 
+// ------- TikTok競合リサーチ -------
+const API_BASE_RESEARCH = 'https://tto-console-api-293189845667.asia-northeast1.run.app';
+
+function formatNumber(n) {
+    if (n >= 10000000) return (n / 10000000).toFixed(1) + '千万';
+    if (n >= 10000) return (n / 10000).toFixed(1) + '万';
+    if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+    return String(n);
+}
+
+function formatDate(timestamp) {
+    const d = new Date(timestamp * 1000);
+    return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
+}
+
+async function runResearch() {
+    const hashtagInput = document.getElementById('researchHashtags').value.trim();
+    if (!hashtagInput) {
+        alert('ハッシュタグを入力してください');
+        return;
+    }
+
+    const hashtags = hashtagInput.split(/[,、\s]+/).map(h => h.replace(/^#/, '').trim()).filter(h => h);
+    const minViews = parseInt(document.getElementById('researchMinViews').value);
+    const postType = document.getElementById('researchPostType').value;
+    const periodDays = parseInt(document.getElementById('researchPeriod').value);
+    const maxResults = parseInt(document.getElementById('researchMaxResults').value);
+
+    const status = document.getElementById('researchStatus');
+    const statusText = document.getElementById('researchStatusText');
+    const resultsDiv = document.getElementById('researchResults');
+    const summaryDiv = document.getElementById('researchSummary');
+
+    status.style.display = 'flex';
+    resultsDiv.innerHTML = '';
+    summaryDiv.style.display = 'none';
+
+    // ステップ表示
+    const steps = [
+        '🔍 TikTok投稿を収集中...',
+        '📊 フィルタリング中...',
+        '🧠 データを分析中...'
+    ];
+    let stepIdx = 0;
+    statusText.textContent = steps[0];
+    const stepInterval = setInterval(() => {
+        stepIdx = Math.min(stepIdx + 1, steps.length - 1);
+        statusText.textContent = steps[stepIdx];
+    }, 5000);
+
+    try {
+        const res = await fetch(`${API_BASE_RESEARCH}/api/tiktok-search`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ hashtags, minViews, postType, periodDays, maxResults })
+        });
+
+        const data = await res.json();
+        clearInterval(stepInterval);
+        status.style.display = 'none';
+
+        if (data.error) {
+            resultsDiv.innerHTML = `<div class="research-error">❌ エラー: ${data.error}</div>`;
+            return;
+        }
+
+        if (!data.posts || data.posts.length === 0) {
+            resultsDiv.innerHTML = `<div class="research-empty">条件に一致する投稿が見つかりませんでした。<br>ハッシュタグや再生数の条件を変えて再検索してみてください。</div>`;
+            return;
+        }
+
+        // サマリー表示
+        const avgSaveRate = (data.posts.reduce((s, p) => s + parseFloat(p.saveRate), 0) / data.posts.length).toFixed(2);
+        const avgEngRate = (data.posts.reduce((s, p) => s + parseFloat(p.engagementRate), 0) / data.posts.length).toFixed(2);
+        const totalViews = data.posts.reduce((s, p) => s + p.playCount, 0);
+
+        summaryDiv.style.display = 'flex';
+        summaryDiv.innerHTML = `
+            <div class="summary-stat">
+                <div class="summary-value">${data.posts.length}<span class="summary-unit">件</span></div>
+                <div class="summary-label">ヒット数 (${data.total}件中)</div>
+            </div>
+            <div class="summary-stat">
+                <div class="summary-value">${formatNumber(totalViews)}</div>
+                <div class="summary-label">合計再生数</div>
+            </div>
+            <div class="summary-stat">
+                <div class="summary-value">${avgSaveRate}<span class="summary-unit">%</span></div>
+                <div class="summary-label">平均保存率</div>
+            </div>
+            <div class="summary-stat">
+                <div class="summary-value">${avgEngRate}<span class="summary-unit">%</span></div>
+                <div class="summary-label">平均エンゲージメント率</div>
+            </div>
+        `;
+
+        // 投稿カード表示
+        resultsDiv.innerHTML = data.posts.map(post => `
+            <a href="${post.url}" target="_blank" rel="noopener" class="research-card">
+                <div class="rc-thumbnail" style="background-image: url('${post.thumbnail}')">
+                    ${post.isImage ? `<span class="rc-type-badge">📷 ${post.imageCount}枚</span>` : '<span class="rc-type-badge">🎥 動画</span>'}
+                </div>
+                <div class="rc-body">
+                    <div class="rc-author">
+                        <span class="rc-author-name">@${post.author}</span>
+                        <span class="rc-date">${formatDate(post.createTime)}</span>
+                    </div>
+                    <div class="rc-caption">${post.caption.slice(0, 80)}${post.caption.length > 80 ? '...' : ''}</div>
+                    <div class="rc-stats">
+                        <span class="rc-stat">▶ ${formatNumber(post.playCount)}</span>
+                        <span class="rc-stat">❤ ${formatNumber(post.diggCount)}</span>
+                        <span class="rc-stat">💬 ${formatNumber(post.commentCount)}</span>
+                        <span class="rc-stat">🔖 ${formatNumber(post.collectCount)}</span>
+                    </div>
+                    <div class="rc-kpis">
+                        <span class="rc-kpi ${parseFloat(post.saveRate) >= 1 ? 'kpi-hot' : ''}">保存率 ${post.saveRate}%</span>
+                        <span class="rc-kpi">Eng率 ${post.engagementRate}%</span>
+                    </div>
+                    <div class="rc-tags">${post.hashtags.slice(0, 5).map(h => `<span class="rc-tag">#${h}</span>`).join('')}</div>
+                </div>
+            </a>
+        `).join('');
+
+    } catch (e) {
+        clearInterval(stepInterval);
+        status.style.display = 'none';
+        resultsDiv.innerHTML = `<div class="research-error">❌ 通信エラー: ${e.message}</div>`;
+    }
+}
+
 // ------- 初期化 -------
 document.addEventListener('DOMContentLoaded', () => {
     initManual();
