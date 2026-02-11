@@ -272,15 +272,21 @@ function initMemo() {
 // ------- AI Chat -------
 const AI_MODELS = {
     // --- Stable & High-Performance Models ---
-    'openai/gpt-4o': { name: 'GPT-4o (OpenAI)', provider: 'OpenAI' },
-    'openai/o1': { name: 'OpenAI o1 (Hard Reasoning)', provider: 'OpenAI' },
+    'openai/gpt-4o': { name: 'GPT-4o (Standard)', provider: 'OpenAI' },
+    'openai/o1': { name: 'OpenAI o1 (Reasoning)', provider: 'OpenAI' },
     'anthropic/claude-3.5-sonnet': { name: 'Claude 3.5 Sonnet', provider: 'Anthropic' },
-    'anthropic/claude-3-opus': { name: 'Claude 3 Opus (Most Intelligent)', provider: 'Anthropic' },
     'google/gemini-2.0-flash-001': { name: 'Gemini 2.0 Flash', provider: 'Google' },
-    'google/gemini-2.0-flash-thinking-exp': { name: 'Gemini 2.0 Flash Thinking (Advanced Reasoning)', provider: 'Google' },
     'deepseek/deepseek-chat': { name: 'DeepSeek V3', provider: 'DeepSeek' },
-    'deepseek/deepseek-reasoner': { name: 'DeepSeek R1 (Reasoning)', provider: 'DeepSeek' },
-    'meta-llama/llama-3.3-70b-instruct': { name: 'Llama 3.3 70B (High Speed)', provider: 'Meta' }
+
+    // --- Verified Futuristic Models (OpenRouter 2026 List) ---
+    'google/gemini-3-pro-preview': { name: 'Gemini 3 Pro Preview', provider: 'Google' },
+    'google/gemini-3-flash-preview': { name: 'Gemini 3 Flash Preview', provider: 'Google' },
+    'anthropic/claude-opus-4.6': { name: 'Claude Opus 4.6 (Next-Gen)', provider: 'Anthropic' },
+    'anthropic/claude-sonnet-4.5': { name: 'Claude Sonnet 4.5', provider: 'Anthropic' },
+    'openai/gpt-5-nano': { name: 'GPT-5 Nano', provider: 'OpenAI' },
+    'openai/gpt-oss-120b': { name: 'GPT-OSS 120B', provider: 'OpenAI' },
+    'deepseek/deepseek-v3.2': { name: 'DeepSeek V3.2', provider: 'DeepSeek' },
+    'qwen/qwen3-max-thinking': { name: 'Qwen 3 Max (Thinking)', provider: 'Alibaba' }
 };
 
 function initChat() {
