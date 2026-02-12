@@ -3,7 +3,55 @@ const MANUAL_DATA = [
     {
         chapter: "第1章 Webマーケティングの原理原則",
         sections: [
-            { id: "ch1-1", title: "1-1 マーケティングとは", html: `<h2>1-1 マーケティングとは</h2><div class="alert-box">マーケティングとは「売れる仕組み」を作ること。AIDMA/AISASなどの購買行動モデルを理解し、顧客が商品を知り、購入に至るまでの流れを設計します。</div><div class="tip-box">📘 このセクションは現在執筆中です。具体的な事例を交えて追記予定。</div>` },
+            {
+                id: "ch1-1", title: "1-1 マーケティングとは", html: `<h2>1-1 マーケティングとは</h2>
+<div class="alert-box">
+    <b>マーケティングを一言で言うと？</b><br>
+    → <b>「需要と供給を繋ぐこと」</b><br>
+    → 需要がわかれば、良い供給を作れる。
+</div>
+
+<h3>供給によって顧客が得たいものとは？</h3>
+<p>→ <b>ベネフィット（理想の未来）</b></p>
+<div class="tip-box">
+    顧客は「モノ」そのものではなく、その先の「変化した自分」を求めています。
+</div>
+
+<h3>需要とは具体的にどういうものか？</h3>
+<p>→ 欲求から生まれた、商品やサービスを欲しいと思う気持ち</p>
+
+<h3>需要が生まれるメカニズム</h3>
+<div class="flow-container">
+    <div class="flow-step"><span><b>現状</b><br>課題がある状態</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step"><span><b>ベネフィットの認知</b><br>外部情報で理想が顕在化</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step"><span><b>欲求の発生</b><br>現状との差分で欲求が生まれる</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step"><span><b>需要の発生</b><br>解決策を探し始める</span></div>
+</div>
+
+<div class="comparison-grid">
+    <div class="comp-box comp-success comp-full">
+        <h4>基本概念の整理</h4>
+        <ul>
+            <li><b>ベネフィット：</b> 自分の理想の姿</li>
+            <li><b>欲求：</b> ベネフィットを実現したいと思う気持ち</li>
+            <li><b>需要：</b> 欲求から生まれた商品やサービスを欲しいと思う気持ち</li>
+            <li><b>供給：</b> 顧客の需要を満たすサービス</li>
+        </ul>
+    </div>
+</div>
+
+<h3>最重要ポイント：顧客理解</h3>
+<div class="alert-box">
+    <b>マーケティングでは顧客を理解することが最重要</b><br>
+    顧客の現状とベネフィットを踏まえて、どのような欲求が生まれているかを深く理解することが、全ての設計の起点となります。
+</div>
+
+<div class="tip-box">
+    💡 詳細はPDF資料「マーケティング1日目.pdf」を参照してください。
+</div>` },
             { id: "ch1-2", title: "1-2 SNSマーケティングの特性", html: `<h2>1-2 SNSマーケティングの特性</h2><div class="alert-box">従来の広告（TV CM・リスティング等）とSNSマーケティングの根本的な違いを理解する。UGC（ユーザー生成コンテンツ）の力と、ファネル構造を把握する。</div><div class="tip-box">📘 このセクションは現在執筆中です。</div>` },
             { id: "ch1-3", title: "1-3 アルゴリズムという概念", html: `<h2>1-3 アルゴリズムという概念</h2><div class="alert-box">プラットフォームが「何を」「誰に」届けるかを決めている仕組み。YouTube・Instagram・TikTokそれぞれで異なるアルゴリズムが動いている。</div><div class="tip-box">📘 このセクションは現在執筆中です。</div>` },
             { id: "ch1-4", title: "1-4 基本指標（CVR・CTR・CPA等）", html: `<h2>1-4 基本指標（CVR・CTR・CPA等）</h2><div class="alert-box">Webマーケティングで日常的に使われるKPIの意味と読み方を理解する。</div><div class="check-grid"><div class="check-item">📊 <b>CVR（コンバージョン率）：</b> 訪問者のうち購入に至った割合</div><div class="check-item">📊 <b>CTR（クリック率）：</b> 表示されたうちクリックされた割合</div><div class="check-item">📊 <b>CPA（顧客獲得単価）：</b> 1件の購入を獲得するためにかかったコスト</div></div><div class="tip-box">📘 TTOではCPA＝0円。これがオーガニック施策の最大の強み。</div>` }
