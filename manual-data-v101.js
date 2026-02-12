@@ -151,7 +151,56 @@ const MANUAL_DATA = [
     <b>インターン生へのメッセージ：</b><br>
     「アルゴリズムをハックしようとするな、ユーザーを満足させよ」。アルゴリズムは常に変化しますが、<b>ユーザーが求める価値を提供し続ける限り、プラットフォーム側は必ずあなたの投稿を優遇します。</b>
 </div>` },
-            { id: "ch1-4", title: "1-4 基本指標（CVR・CTR・CPA等）", html: `<h2>1-4 基本指標（CVR・CTR・CPA等）</h2><div class="alert-box">Webマーケティングで日常的に使われるKPIの意味と読み方を理解する。</div><div class="check-grid"><div class="check-item">📊 <b>CVR（コンバージョン率）：</b> 訪問者のうち購入に至った割合</div><div class="check-item">📊 <b>CTR（クリック率）：</b> 表示されたうちクリックされた割合</div><div class="check-item">📊 <b>CPA（顧客獲得単価）：</b> 1件の購入を獲得するためにかかったコスト</div></div><div class="tip-box">📘 TTOではCPA＝0円。これがオーガニック施策の最大の強み。</div>` }
+            {
+                id: "ch1-4", title: "1-4 基本指標（CVR・CTR・CPA等）", html: `<h2>1-4 基本指標（CVR・CTR・CPA等）</h2>
+<div class="alert-box">
+    Webマーケティングでは、感覚ではなく<b>「数値（データ）」</b>で判断することが鉄則です。各指標の意味と、それらが「どこを改善すべきか」を教えてくれるシグナルであることを理解しましょう。
+</div>
+
+<div class="feature-grid">
+    <div class="feature-card">
+        <div class="card-icon">🖱️</div>
+        <div>
+            <div class="card-title">CTR (Click Through Rate)</div>
+            <div class="card-desc"><b>【クリック率】</b><br>表示されたうち、何％がクリックしたか。主に「表紙（1枚目）」や「タイトル」の引きの強さを測る指標です。</div>
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="card-icon">🛒</div>
+        <div>
+            <div class="card-title">CVR (Conversion Rate)</div>
+            <div class="card-desc"><b>【成約率】</b><br>クリックしたうち、何％が購入に至ったか。誘導先の「LP」や「商品そのものの魅力」を測る指標です。</div>
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="card-icon">💰</div>
+        <div>
+            <div class="card-title">CPA (Cost Per Acquisition)</div>
+            <div class="card-desc"><b>【顧客獲得単価】</b><br>1人を獲得するためにかかった費用。TTO（オーガニック）ではこれが「実質0円」になるのが最強のメリットです。</div>
+        </div>
+    </div>
+</div>
+
+<h3>指標から課題を見つける「診断」の考え方</h3>
+<p>数値が悪いとき、どこにメスを入れるべきかを判断するのがマーケターの役割です。</p>
+
+<div class="comparison-grid">
+    <div class="comp-box comp-risk">
+        <h4>CTRが低い場合</h4>
+        <p><b>診断：入口で拒絶されている</b><br>
+        対策：1枚目の画像、フック（冒頭1秒）、キャッチコピーを改善する。</p>
+    </div>
+    <div class="comp-box comp-risk">
+        <h4>CVRが低い場合</h4>
+        <p><b>診断：中身/出口で熱が冷めている</b><br>
+        対策：動画内の教育力（ベネフィット訴求）、LPの導線、オファー内容を改善する。</p>
+    </div>
+</div>
+
+<div class="tip-box">
+    💡 <b>TTO独自の重要指標：保存率</b><br>
+    TikTokやInstagramでは「保存数」がアルゴリズムに最も評価されます。「後で見返したい」と思われる情報（実用性、マニアックな知識、憧れ）が高いほど、拡散されやすくなります。
+</div>` }
         ]
     },
     {
