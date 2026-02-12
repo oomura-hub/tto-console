@@ -50,7 +50,7 @@ const MANUAL_DATA = [
 </div>
 
 <div class="tip-box">
-    💡 詳細はPDF資料「マーケティング1日目.pdf」を参照してください。
+    💡 詳細はPDF資料「<a href="https://drive.google.com/file/d/15UaXFEmXI1OGb55TKRRS04b9KpEwPEHh/view" target="_blank">マーケティング1日目.pdf</a>」を参照してください。
 </div>` },
             { id: "ch1-2", title: "1-2 SNSマーケティングの特性", html: `<h2>1-2 SNSマーケティングの特性</h2><div class="alert-box">従来の広告（TV CM・リスティング等）とSNSマーケティングの根本的な違いを理解する。UGC（ユーザー生成コンテンツ）の力と、ファネル構造を把握する。</div><div class="tip-box">📘 このセクションは現在執筆中です。</div>` },
             { id: "ch1-3", title: "1-3 アルゴリズムという概念", html: `<h2>1-3 アルゴリズムという概念</h2><div class="alert-box">プラットフォームが「何を」「誰に」届けるかを決めている仕組み。YouTube・Instagram・TikTokそれぞれで異なるアルゴリズムが動いている。</div><div class="tip-box">📘 このセクションは現在執筆中です。</div>` },
