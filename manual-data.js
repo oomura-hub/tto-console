@@ -52,7 +52,57 @@ const MANUAL_DATA = [
 <div class="tip-box">
     💡 詳細はPDF資料「<a href="https://drive.google.com/file/d/15UaXFEmXI1OGb55TKRRS04b9KpEwPEHh/view" target="_blank">マーケティング1日目.pdf</a>」を参照してください。
 </div>` },
-            { id: "ch1-2", title: "1-2 SNSマーケティングの特性", html: `<h2>1-2 SNSマーケティングの特性</h2><div class="alert-box">従来の広告（TV CM・リスティング等）とSNSマーケティングの根本的な違いを理解する。UGC（ユーザー生成コンテンツ）の力と、ファネル構造を把握する。</div><div class="tip-box">📘 このセクションは現在執筆中です。</div>` },
+            {
+                id: "ch1-2", title: "1-2 SNSマーケティングの特性", html: `<h2>1-2 SNSマーケティングの特性</h2>
+<div class="alert-box">
+    SNSマーケティングとは、従来の<b>「一方的な広告」</b>ではなく、ユーザーとの<b>「双方向のつながり」</b>を軸とした次世代のマーケティング手法です。
+</div>
+
+![SNSマーケティングの特性イメージ](sns_marketing_traits_1770880909877.png)
+
+<h3>1. 従来の広告（Web/リスティング）との根本的な違い</h3>
+<p>SNSと検索エンジン（Google等）では、利用するユーザーの<b>心理状態</b>が全く異なります。</p>
+
+<div class="comparison-grid">
+    <div class="comp-box comp-risk">
+        <h4>検索/リスティング広告</h4>
+        <p><b>【顕在ニーズ / 目的あり】</b><br>
+        「これを買いたい」「これを調べたい」という明確な目的を持って検索する層。効率は良いが、パイが限られる。</p>
+    </div>
+    <div class="comp-box comp-success">
+        <h4>SNS（TikTok等）</h4>
+        <p><b>【潜在ニーズ / セレンディピティ】</b><br>
+        「何か面白いものないかな」というリラックスした状態で閲覧。偶然の出会いから新しい欲求が生まれる（発見性）。</p>
+    </div>
+</div>
+
+<h3>2. SNSマーケティングを定義する3大特性</h3>
+<div class="check-grid">
+    <div class="check-item">
+        🔄 <b>圧倒的な拡散力（二次拡散）：</b><br>
+        投稿がシェア（レコメンド）されることで、フォロワー以外の不特定多数へ爆発的に広がります。
+    </div>
+    <div class="check-item">
+        🤝 <b>双方向コミュニケーション：</b><br>
+        コメントやDMを通じて顧客と直接つながり、「ファン」を育成できます。信頼（ロイヤルティ）が購買に直結します。
+    </div>
+    <div class="check-item">
+        🎨 <b>UGC（ユーザー生成コンテンツ）：</b><br>
+        企業の発信よりも「一般ユーザーのリアルな感想」が最も信頼されるのがSNSの世界です。
+    </div>
+</div>
+
+<h3>3. 重要用語：UGCとは？</h3>
+<div class="tip-box">
+    <b>UGC (User Generated Content)：</b><br>
+    ユーザーによって作られたコンテンツ（投稿、レビュー、動画等）のことです。<br>
+    今の時代、ユーザーは広告を嫌います。しかし、<b>「自分と似た誰かの本音」</b>には強く反応します。TTO（オーガニック投稿）の目的は、このUGCに近い自然な形での認知獲得です。
+</div>
+
+<div class="alert-box">
+    <b>インターン生へのメッセージ：</b><br>
+    「売ろうとするな、つながろうとせよ」。SNSでは広告感が出た瞬間にスワイプされます。ユーザーの日常に溶け込み、共感や発見を生むことが成功の鍵です。
+</div>` },
             { id: "ch1-3", title: "1-3 アルゴリズムという概念", html: `<h2>1-3 アルゴリズムという概念</h2><div class="alert-box">プラットフォームが「何を」「誰に」届けるかを決めている仕組み。YouTube・Instagram・TikTokそれぞれで異なるアルゴリズムが動いている。</div><div class="tip-box">📘 このセクションは現在執筆中です。</div>` },
             { id: "ch1-4", title: "1-4 基本指標（CVR・CTR・CPA等）", html: `<h2>1-4 基本指標（CVR・CTR・CPA等）</h2><div class="alert-box">Webマーケティングで日常的に使われるKPIの意味と読み方を理解する。</div><div class="check-grid"><div class="check-item">📊 <b>CVR（コンバージョン率）：</b> 訪問者のうち購入に至った割合</div><div class="check-item">📊 <b>CTR（クリック率）：</b> 表示されたうちクリックされた割合</div><div class="check-item">📊 <b>CPA（顧客獲得単価）：</b> 1件の購入を獲得するためにかかったコスト</div></div><div class="tip-box">📘 TTOではCPA＝0円。これがオーガニック施策の最大の強み。</div>` }
         ]
