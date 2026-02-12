@@ -486,10 +486,296 @@ const MANUAL_DATA = [
     {
         chapter: "第6章 AI活用",
         sections: [
-            { id: "ch6-1", title: "6-1 AIに任せること・任せないこと", html: `<h2>6-1 AIに任せること・任せないこと</h2><div class="comparison-grid"><div class="comp-box comp-success"><h4>AIに任せる（作業）</h4><p>・テキスト構成の生成<br>・競合投稿の分析<br>・概要欄テキストの作成<br>・コメント文案の生成</p></div><div class="comp-box comp-risk"><h4>人が判断する（戦略）</h4><p>・ペルソナ設計<br>・商品選定<br>・最終的なクリエイティブ判断<br>・投稿のGo/NoGo</p></div></div>` },
-            { id: "ch6-2", title: "6-2 プロンプトの基本", html: `<h2>6-2 プロンプトの基本</h2><div class="tip-box">📘 このセクションは現在執筆中です。AIに正確にやらせるための指示の出し方について追記予定。</div>` },
-            { id: "ch6-3", title: "6-3 TTO統合コンソールの使い方", html: `<h2>6-3 TTO統合コンソールの使い方</h2><div class="tip-box">📘 このセクションは現在執筆中です。ジェネレーター・チャット・リサーチの各機能の操作手順について追記予定。</div>` },
-            { id: "ch6-4", title: "6-4 AIでリサーチを加速する", html: `<h2>6-4 AIでリサーチを加速する</h2><div class="tip-box">📘 このセクションは現在執筆中です。画像添付→「このバズ投稿の構成を分析して」の活用法について追記予定。</div>` }
+            {
+                id: "ch6-1", title: "6-1 AIに任せること・任せないこと", html: `<h2>6-1 AIに任せること・任せないこと</h2>
+<div class="alert-box">
+    AIは<b>「優秀だが判断力のないインターン」</b>だと思ってください。作業スピードは人間の100倍ですが、<b>「何を作るべきか」「これが本当にバズるか」</b>という戦略判断は必ず人間が行います。
+</div>
+
+<h3>1. AI × 人間の役割分担</h3>
+<div class="comparison-grid">
+    <div class="comp-box comp-success">
+        <h4>✅ AIに任せる（作業・量産）</h4>
+        <ul>
+            <li><b>テキスト構成の生成：</b> 投稿の台本・スライド文案のたたき台を一瞬で生成</li>
+            <li><b>競合投稿の分析：</b> バズ投稿のスクショを渡して「なぜバズったか」を構造的に分析</li>
+            <li><b>概要欄テキスト作成：</b> 500〜800文字の概要欄を、投稿テーマに沿って自動生成</li>
+            <li><b>コメント文案の生成：</b> PR感のない自然なコメントを複数パターン提案</li>
+            <li><b>ハッシュタグ選定：</b> テーマに最適なタグをリストアップ</li>
+            <li><b>リサーチの要約：</b> 長い記事やデータを要点整理</li>
+        </ul>
+    </div>
+    <div class="comp-box comp-risk">
+        <h4>🚫 人間が判断する（戦略・感性）</h4>
+        <ul>
+            <li><b>ペルソナ設計：</b> 「誰に届けるか」の戦略はAIには判断できない</li>
+            <li><b>商品選定：</b> 市場性・利益率・競合状況の総合判断</li>
+            <li><b>最終クリエイティブ判断：</b> 「これ、本当にバズるか？」の嗅覚</li>
+            <li><b>投稿のGo/NoGo：</b> 炎上リスク・ブランド毀損の判断</li>
+            <li><b>トレンドの見極め：</b> 「今この瞬間に刺さるか」はリアルタイム感覚が必要</li>
+        </ul>
+    </div>
+</div>
+
+<h3>2. TTO業務でのAI活用マップ</h3>
+<div class="feature-grid">
+    <div class="feature-card">
+        <div class="card-icon">📝</div>
+        <div>
+            <div class="card-title">企画フェーズ</div>
+            <div class="card-desc">「美容系で20代女性に刺さる投稿テーマを10個出して」<br>→ AIがアイデアを大量生成 → 人間がTikTokのトレンドと照合して厳選</div>
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="card-icon">🔍</div>
+        <div>
+            <div class="card-title">リサーチフェーズ</div>
+            <div class="card-desc">バズ投稿のスクショを添付して「この投稿の構成・フック・離脱防止策を分析して」<br>→ 人間では30分かかる分析が1分で完了</div>
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="card-icon">✍️</div>
+        <div>
+            <div class="card-title">制作フェーズ</div>
+            <div class="card-desc">「以下の構成案をもとに、各スライドのテキストを生成して」<br>→ たたき台をAIが生成 → 人間がTikTokの視認性・トーンに調整</div>
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="card-icon">💬</div>
+        <div>
+            <div class="card-title">投稿後フェーズ</div>
+            <div class="card-desc">「この商品の良さをPR感なく伝えるコメントを5個作って」<br>→ AIが自然な口語で文案生成 → 人間がステマにならないかチェック</div>
+        </div>
+    </div>
+</div>
+
+<div class="tip-box">
+    ⚠️ <b>最重要ルール：</b><br>
+    AIの出力を<b>「そのまま使わない」</b>こと。AIはあくまで「80点のたたき台」を高速で作るツール。<b>残りの20点を人間の感性と経験で磨き上げる</b>ことで、初めてバズるコンテンツが生まれます。
+</div>` },
+            {
+                id: "ch6-2", title: "6-2 プロンプトの基本", html: `<h2>6-2 プロンプトの基本</h2>
+<div class="alert-box">
+    プロンプトとは、AIへの<b>「指示文」</b>のこと。<b>指示の質 ＝ 出力の質</b>です。曖昧に聞けば曖昧に返ってくる。具体的に聞けば、具体的で使える回答が返ってきます。
+</div>
+
+<h3>1. 良いプロンプトの5大原則</h3>
+<p>複数の情報源に共通する、質の高いプロンプトを書くための原則をまとめました。</p>
+<div class="check-grid">
+    <div class="check-item">
+        🎭 <b>①役割を与える（ロール設定）：</b><br>
+        「あなたはTikTokマーケティングの専門家です」と伝えるだけで、回答の専門性と精度が劇的に上がります。
+    </div>
+    <div class="check-item">
+        🎯 <b>②目的を明確にする：</b><br>
+        「何をしてほしいか」を具体的に。「投稿案を作って」ではなく「20代男性向けの美容系TikTok画像スライド8枚の構成案を作って」。
+    </div>
+    <div class="check-item">
+        📋 <b>③制約条件を指定する：</b><br>
+        文字数、口調、箇条書き/表形式、NG表現など。「です・ます調」「各スライド20文字以内」「PR感を出さない」など。
+    </div>
+    <div class="check-item">
+        📄 <b>④背景情報（コンテキスト）を提供する：</b><br>
+        ターゲット、商品情報、競合の状況などを伝えると、AIはより的確な回答を返します。
+    </div>
+    <div class="check-item">
+        📝 <b>⑤お手本（例）を見せる：</b><br>
+        「以下の形式で出力して」と例を添えると、出力のブレが大幅に減ります（Few-shotプロンプティング）。
+    </div>
+</div>
+
+<h3>2. 実践フレームワーク（深津式）</h3>
+<p>日本で広く使われている「深津式プロンプト」を使えば、安定して高品質な回答が得られます。</p>
+<div class="comparison-grid">
+    <div class="comp-box comp-success comp-full">
+        <h4>深津式プロンプトの構造</h4>
+        <p style="font-family: monospace; white-space: pre-line; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+# 命令書
+あなたは{役割}です。
+以下の制約条件と入力文をもとに、最高の{出力}を出力してください。
+
+# 制約条件
+・{条件1}
+・{条件2}
+・{条件3}
+
+# 入力文
+{ここに具体的な入力}
+
+# 出力文
+        </p>
+    </div>
+</div>
+
+<h3>3. TTO業務で使えるプロンプト実例集</h3>
+<div class="feature-grid">
+    <div class="feature-card">
+        <div class="card-icon">📝</div>
+        <div>
+            <div class="card-title">投稿構成案の生成</div>
+            <div class="card-desc" style="font-size: 0.85em;">「あなたはTikTokバズ投稿の専門家です。以下の条件で画像スライド8枚の構成案を作成してください。<br>・ターゲット：20代男性<br>・テーマ：モテる香水<br>・1枚目はフック（常識の否定）<br>・2枚目は興味引き<br>・各スライドは見出し20文字以内＋補足1行」</div>
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="card-icon">💬</div>
+        <div>
+            <div class="card-title">コメント文案の生成</div>
+            <div class="card-desc" style="font-size: 0.85em;">「以下のTikTok投稿に対して、PR感がなく自然なコメントを5つ作ってください。<br>・商品名を直接言わない<br>・口語で短く（30文字以内）<br>・「気になる」「使ってみたい」と思わせる内容<br>・投稿内容：〇〇」</div>
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="card-icon">📄</div>
+        <div>
+            <div class="card-title">概要欄テキストの生成</div>
+            <div class="card-desc" style="font-size: 0.85em;">「以下のTikTok投稿の概要欄テキストを600文字程度で作成してください。<br>・投稿テーマ：〇〇<br>・ターゲット：〇〇<br>・自然な口語で、読んでいて面白い内容<br>・関連するハッシュタグも5つ提案してください」</div>
+        </div>
+    </div>
+</div>
+
+<div class="comparison-grid">
+    <div class="comp-box comp-risk comp-full">
+        <h4>❌ ダメなプロンプトの例</h4>
+        <p>「TikTokの投稿案を作って」<br>→ 何の投稿？誰向け？何枚？どんなトーン？情報が足りず、汎用的で使えない回答が返ってきます。</p>
+    </div>
+</div>
+
+<div class="tip-box">
+    💡 <b>上達のコツ：</b><br>
+    最初の回答が微妙でも諦めない。「もっと〇〇して」「トーンを変えて」「具体例を増やして」と<b>対話を重ねて磨き上げる</b>のがプロンプトの本質です。1回で完璧を求めるのではなく、<b>「AIとのキャッチボール」</b>で精度を上げていきましょう。
+</div>` },
+            {
+                id: "ch6-3", title: "6-3 TTO統合コンソールの使い方", html: `<h2>6-3 TTO統合コンソールの使い方</h2>
+<div class="alert-box">
+    TTO統合コンソールは、<b>AI活用をTTO業務に最適化した社内ツール</b>です。「ジェネレーター」「チャット」「マニュアル」の3つの機能を搭載しています。
+</div>
+
+<h3>1. 各機能の役割</h3>
+<div class="feature-grid">
+    <div class="feature-card">
+        <div class="card-icon">⚡</div>
+        <div>
+            <div class="card-title">ジェネレーター</div>
+            <div class="card-desc"><b>目的：</b> 投稿に必要なテキストをワンクリックで自動生成<br><br><b>できること：</b><br>・投稿構成案（8枚スライド）の生成<br>・概要欄テキストの生成<br>・コメント文案の生成<br>・商品と参考投稿を入力するだけで即アウトプット</div>
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="card-icon">💬</div>
+        <div>
+            <div class="card-title">AIチャット</div>
+            <div class="card-desc"><b>目的：</b> TTO業務に特化したAIアシスタントと自由に対話<br><br><b>できること：</b><br>・バズ投稿の分析（画像添付可能）<br>・投稿アイデアの壁打ち<br>・マーケティング知識の質問<br>・構成案のブラッシュアップ</div>
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="card-icon">📖</div>
+        <div>
+            <div class="card-title">マニュアル</div>
+            <div class="card-desc"><b>目的：</b> TTO業務の全知識を集約したナレッジベース<br><br><b>できること：</b><br>・今あなたが読んでいるこのページです<br>・業務手順、戦略、ツール情報を網羅<br>・いつでも参照可能</div>
+        </div>
+    </div>
+</div>
+
+<h3>2. 使い方の基本フロー</h3>
+<div class="flow-container">
+    <div class="flow-step"><span class="step-number">01</span><span><b>ジェネレーターで生成：</b><br>商品・参考投稿・ターゲットを入力し、構成案やコメント文案を自動生成</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step"><span class="step-number">02</span><span><b>AIチャットで磨く：</b><br>生成された内容をコピーしてチャットに貼り、「もっとフックを強くして」「2枚目を変えて」など対話で改善</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step"><span class="step-number">03</span><span><b>人間が最終判断：</b><br>AIの出力を参考に、自身のTikTok感覚とトレンド理解で最終調整してCanvaで制作</span></div>
+</div>
+
+<div class="tip-box">
+    🚀 <b>活用のコツ：</b><br>
+    ジェネレーターは「速さ」、チャットは「深さ」が強み。まずジェネレーターで大量にたたき台を作り、有望なものをチャットで深掘り・改善するのが最も効率的な使い方です。
+</div>` },
+            {
+                id: "ch6-4", title: "6-4 AIでリサーチを加速する", html: `<h2>6-4 AIでリサーチを加速する</h2>
+<div class="alert-box">
+    TTO業務で最も時間がかかるのが<b>「リサーチ」</b>です。AIを使えば、人間が30分かかる競合分析を<b>1〜2分</b>に短縮できます。ただし、AIに何を聞くかは人間の腕次第です。
+</div>
+
+<h3>1. AI×リサーチの実践ワークフロー</h3>
+<div class="flow-container">
+    <div class="flow-step"><span class="step-number">01</span><span><b>バズ投稿を発見する</b><br>リサーチ用アカウントのおすすめ欄から10万再生以上の投稿を保存</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step"><span class="step-number">02</span><span><b>スクリーンショットを撮る</b><br>1枚目〜最終枚まで全スライドを画像として保存</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step"><span class="step-number">03</span><span><b>AIチャットに画像を添付して分析依頼</b><br>画像を添付し、以下のプロンプトで分析を依頼</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step"><span class="step-number">04</span><span><b>分析結果をスプレッドシートに記録</b><br>AIの分析 ＋ 自分の考察を追記して蓄積</span></div>
+</div>
+
+<h3>2. コピペで使えるリサーチプロンプト</h3>
+<div class="comparison-grid">
+    <div class="comp-box comp-success comp-full">
+        <h4>🔍 バズ投稿の構造分析プロンプト</h4>
+        <p style="font-family: monospace; white-space: pre-line; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; font-size: 0.85em;">
+添付した画像はTikTokでバズった画像スライド投稿です。
+以下の観点で構造的に分析してください。
+
+1. 1枚目のフック：なぜスワイプが止まるのか？
+2. 2枚目の興味引き：どんなテクニックが使われているか？
+3. 3枚目以降の離脱防止策：どう見続けさせているか？
+4. 全体の構成パターン：何枚構成で、どんな流れか？
+5. ターゲット層の推定
+6. この投稿をTTPする場合のポイント
+        </p>
+    </div>
+</div>
+
+<div class="comparison-grid">
+    <div class="comp-box comp-success comp-full">
+        <h4>💡 競合アカウント分析プロンプト</h4>
+        <p style="font-family: monospace; white-space: pre-line; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; font-size: 0.85em;">
+以下のTikTokアカウントの投稿傾向を分析してください。
+URL: [アカウントURL]
+
+分析項目：
+1. 投稿フォーマット（動画 or 画像スライド）の割合
+2. バズっている投稿に共通する要素
+3. 使用頻度の高い構成パターン
+4. フック（1枚目/冒頭）で使われているテクニック
+5. 弊社が参考にできるポイント
+        </p>
+    </div>
+</div>
+
+<h3>3. AI分析の精度を上げる3つのコツ</h3>
+<div class="check-grid">
+    <div class="check-item">
+        📸 <b>画像は全枚添付する：</b><br>
+        1枚目だけでなく、全スライドを渡すことで「構成の流れ」まで分析できます。
+    </div>
+    <div class="check-item">
+        📊 <b>数値データも伝える：</b><br>
+        「この投稿は30万再生、保存2000、コメント500」など指標を添えると、AIがなぜバズったかをより正確に推測できます。
+    </div>
+    <div class="check-item">
+        🤔 <b>自分の仮説を先に伝える：</b><br>
+        「1枚目の女性画像がフックになっていると思いますが、他にバズ要因はありますか？」と聞くと、AIが人間の視点を補完する形で深い分析を返します。
+    </div>
+</div>
+
+<h3>4. TTO活用例：リサーチ→投稿の流れ</h3>
+<div class="comparison-grid">
+    <div class="comp-box comp-success comp-full">
+        <h4>具体例：美容商材の投稿を作る場合</h4>
+        <p>
+        <b>① リサーチ：</b> 美容系でバズっている投稿を5個AIで分析<br>
+        → 共通点：「○選」フォーマット、1枚目に芸能人画像、テキスト20文字以内<br><br>
+        <b>② 企画：</b> AIに「上記の共通点を活かした投稿テーマを10個提案して」と依頼<br>
+        → 「実は効果なし！SNSで話題の美容法7選」を採用<br><br>
+        <b>③ 構成：</b> AIジェネレーターで8枚の構成案を生成 → 人間がフックを強化<br><br>
+        <b>④ 制作：</b> Canvaでスライド作成 → 投稿<br><br>
+        → <b>結果：かかった時間は従来の半分以下</b>
+        </p>
+    </div>
+</div>
+
+<div class="tip-box">
+    💡 <b>リサーチの本当の目的：</b><br>
+    AIにリサーチを任せる最大のメリットは「時間短縮」ではありません。<b>分析の数を増やせること</b>です。<br>
+    1日4件のリサーチが8件になれば、バズのパターン認識力が2倍のスピードで身につきます。量をこなした分だけ、AIなしでも「直感的にバズがわかる」ようになっていきます。
+</div>` }
         ]
     },
     {
