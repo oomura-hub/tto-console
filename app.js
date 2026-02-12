@@ -403,6 +403,56 @@ function initChat() {
         renderImagePreview();
     };
 
+    // 画像をbase64として追加する共通関数
+    function addImageFile(file) {
+        if (!file.type.startsWith('image/')) return;
+        if (file.size > 5 * 1024 * 1024) {
+            alert('画像は5MB以下にしてください');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            pendingImages.push(ev.target.result);
+            renderImagePreview();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // ドラッグ&ドロップ対応
+    const chatPanel = document.getElementById('panelChat');
+    if (chatPanel) {
+        chatPanel.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            chatPanel.classList.add('drag-over');
+        });
+        chatPanel.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            chatPanel.classList.remove('drag-over');
+        });
+        chatPanel.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            chatPanel.classList.remove('drag-over');
+            const files = Array.from(e.dataTransfer.files);
+            files.forEach(f => addImageFile(f));
+        });
+    }
+
+    // クリップボード貼り付け（Ctrl+V / Cmd+V）対応
+    if (chatInput) {
+        chatInput.addEventListener('paste', (e) => {
+            const items = Array.from(e.clipboardData?.items || []);
+            items.forEach(item => {
+                if (item.type.startsWith('image/')) {
+                    e.preventDefault();
+                    const file = item.getAsFile();
+                    if (file) addImageFile(file);
+                }
+            });
+        });
+    }
 
     function addMessage(text, isAi, options = {}) {
         const div = document.createElement('div');

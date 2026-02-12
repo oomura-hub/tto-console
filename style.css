@@ -1721,3 +1721,25 @@ body {
     border-radius: 8px;
     border: 1px solid var(--border);
 }
+
+/* ドラッグ&ドロップ時の視覚フィードバック */
+.panel-body.drag-over {
+    position: relative;
+}
+
+.panel-body.drag-over::after {
+    content: '📷 画像をドロップして添付';
+    position: absolute;
+    inset: 0;
+    background: rgba(56, 189, 248, 0.12);
+    border: 2px dashed var(--accent);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    z-index: 100;
+    pointer-events: none;
+}
