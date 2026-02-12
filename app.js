@@ -587,6 +587,16 @@ ${manualText}
 箇条書きは「・」を使用。日本語で回答。参考URLがある場合は必ずリンクを含めてください。Markdownリンク形式 [サイト名](URL) での記載を推奨します。${isWebSearch ? '\nWeb検索結果が提供された場合、それを踏まえて最新かつ正確な情報に基づいて回答してください。必ず出典元のURLリンクを含めてください。' : ''}`;
 
             const messages = [{ role: 'system', content: systemPrompt }, ...conversationHistory];
+
+            // 送信前に過去メッセージの画像base64を除去（直近ユーザーメッセージ以外）
+            for (let i = 0; i < messages.length - 1; i++) {
+                if (Array.isArray(messages[i].content)) {
+                    // multimodalメッセージからテキスト部分だけ残す
+                    const textParts = messages[i].content.filter(c => c.type === 'text').map(c => c.text);
+                    messages[i] = { role: messages[i].role, content: textParts.join('\n') + '\n[画像添付あり（省略）]' };
+                }
+            }
+
             const result = await callChatAPI(model, messages, isWebSearch);
 
             const thinkingEl = document.getElementById('thinking');
