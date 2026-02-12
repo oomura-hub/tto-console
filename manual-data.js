@@ -54,34 +54,86 @@ const MANUAL_DATA = [
         chapter: "第4章 バズの原理原則",
         sections: [
             {
-                id: "ch4-1", title: "4-1 バズの構造", html: `<h2>4-1 バズの構造（指標と拡散の関係）</h2>
-<div class="alert-box"><b>バズの定義：20〜30万再生以上</b></div>
-<h3>バズの3ステップ</h3>
-<div class="flow-container"><div class="flow-step"><span class="step-number">01</span><span><b>指を止める：</b> 1枚目。0.5秒でスワイプを止めさせる（トレンド画像・インパクト）</span></div><div class="flow-arrow">↓</div><div class="flow-step"><span class="step-number">02</span><span><b>興味を持つ：</b> 2枚目。常識の破壊・新情報・物議を醸す内容で離脱を防ぐ</span></div><div class="flow-arrow">↓</div><div class="flow-step"><span class="step-number">03</span><span><b>見続ける：</b> 3枚目以降。情報密度を高め、「最後まで見ないと気持ち悪い」構造を作る</span></div></div>` },
+                id: "ch4-1", title: "4-1 バズの本質", html: `<h2>4-1 バズの本質</h2>
+<div class="alert-box"><b>どんな投稿がバズるか？ = 滞在時間が長い投稿。</b>これが最も重要。<br>その他いいね・保存・共有などのエンゲージメントも評価項目にはあるが、アルゴリズムが最も重視するのは「どれだけ長く見られたか」。<br><br>SNSはユーザーの可処分時間の奪い合い。滞在時間が長い投稿をプラットフォームは優遇する。</div>
+<h3>バズの3段階</h3>
+<div class="flow-container"><div class="flow-step"><span class="step-number">01</span><span><b>指を止める：</b> 1枚目。0.5秒でスワイプを止めさせる</span></div><div class="flow-arrow">↓</div><div class="flow-step"><span class="step-number">02</span><span><b>見る（興味を持つ）：</b> 2枚目。常識の破壊・新情報・物議で離脱を防ぐ</span></div><div class="flow-arrow">↓</div><div class="flow-step"><span class="step-number">03</span><span><b>見続ける：</b> 3枚目以降。信憑性や読む価値がないと見続けてくれない。このグラデーションの繊細な部分が重要</span></div></div>
+<div class="tip-box">💡 この3段階が<b>すべて揃って</b>初めてバズが発生する。どれか1つでも欠けると伸びない。</div>` },
             {
-                id: "ch4-2", title: "4-2 フック（1枚目）の原則", html: `<h2>4-2 フック（1枚目）の原則</h2>
-<div class="alert-box">1枚目で指を止めるための「画像選定」には明確な序列が存在します。</div>
+                id: "ch4-2", title: "4-2 バズ確率を上げる7つの要素", html: `<h2>4-2 バズ確率を上げる7つの要素</h2>
+<div class="check-grid">
+<div class="check-item">🔄 <b>①参考動画を真似すること（TTP）：</b> 何においてもうまいものをパクるのが上手くなる/成果を出す上では大事。なるべくバズった要因であろう部分（変数）は動かさず、＋αのアイディアを乗っける</div>
+<div class="check-item">🔥 <b>②トレンドが超大事：</b> ユーザーの興味関心を引きやすく、アルゴリズム上も優遇されやすい。季節やイベント、大衆認知のある旬のニュースなど</div>
+<div class="check-item">👁️ <b>③TikTok上での視認性：</b> ユーザーは見る気がない状態でアプリを開いているため、視認性が悪いと見てもらえない</div>
+<div class="check-item">✨ <b>④目新しさ：</b> CR（クリエイティブ）は枯れない。枯れるのはCRの見栄えや素材が飽きられるから。同じ内容でもフォーマット・演出を変えれば再び伸びることがある</div>
+<div class="check-item">🧠 <b>⑤わかりやすさ：</b> TikTok見てる時は脳は死んでる。難しい解説を入れても大衆からは見られない。ただしユーザーが見る姿勢になっていれば長文は読まれ、滞在時間が増えてバズる。ケースバイケース</div>
+<div class="check-item">🎯 <b>⑥パイ（反応できる人数）が大きいテーマ：</b> 投稿の反響（IMPや再生数）は「投稿の内容に反応できる人数」に依存する。バズを狙う上では入り口を狭めすぎてはいけない</div>
+<div class="check-item">⏱️ <b>⑦滞在時間を伸ばす仕掛け：</b> 診断要素を入れる、視聴者参加型の方程式を入れる（例：水の適性摂取量は身長×XX）など</div>
+</div>
+<div class="tip-box">⚠️ <b>ターゲットを絞りすぎるとバズらない</b><br>例：男磨きの投稿で「マッチョになりたい人」をターゲットにすると、マッチョに興味がない人は0.5秒でスワイプしてしまう。<br>相席屋＜＜マッチングアプリ　くらいのパイの違いをイメージ。<br><b>全員が「見たい」と思えるような面白い投稿を作る</b></div>` },
+            {
+                id: "ch4-3", title: "4-3 情報密度とわかりやすさ", html: `<h2>4-3 情報密度とわかりやすさ</h2>
+<div class="alert-box">世の中には短期快楽コンテンツが溢れている。何かを伝えたい時は<b>相手の脳処理負担を抑えること</b>が大事。</div>
+<h3>情報密度を高めるポイント</h3>
+<div class="check-grid">
+<div class="check-item">📝 視聴者の「思考コストを最小にしてあげる」意識 ≒ わかりやすいタイトルにする</div>
+<div class="check-item">✂️ 不要なものはとにかく削って情報密度を最大まで高める</div>
+<div class="check-item">🖼️ 画像を効果的に使って視認性を上げる</div>
+<div class="check-item">📏 文章が長すぎたり情報量が多すぎて離脱されるのはよくある話</div>
+</div>
+<div class="comparison-grid"><div class="comp-box comp-success"><h4>わかりやすさのテクニック</h4><p>・画像を適切に使う<br>・視認性の良いビジュアルにする<br>・いらない文を省き短くする<br>・TikTok上で見やすいフォントサイズ</p></div><div class="comp-box comp-risk"><h4>ありがちな失敗</h4><p>・文章が長すぎて読む気が失せる<br>・難しい専門用語の多用<br>・画像なしのテキストだらけ<br>・情報の優先順位がない</p></div></div>` },
+            {
+                id: "ch4-4", title: "4-4 1枚目（フック）の原則", html: `<h2>4-4 1枚目（フック）の原則</h2>
+<div class="alert-box"><b>目的：ユーザーのスワイプを止めて、まず見てもらうこと（指を止める）</b></div>
+<h3>画像選定の優先順位</h3>
 <div class="comparison-grid"><div class="comp-box comp-success comp-full" style="text-align:center"><h4>トレンド画像 ＞＞＞＞ 女性画像 ＞ 男性画像 ＝ アニメ画像</h4></div></div>
-<div class="check-grid"><div class="check-item">🔥 <b>トレンド画像：</b> 旬のニュース、芸能人のスキャンダル、TikTokで話題の人物。</div><div class="check-item">👩 <b>女性画像：</b> 「爆美女」より「可愛い系/彼女感」。大衆男性ウケが重要。</div><div class="check-item">👨 <b>男性画像：</b> 「こうなりたい」と思わせる清潔感・憧れ（男磨き系向け）。</div><div class="check-item">🎌 <b>アニメ画像：</b> 認知度の高い作品（鬼滅、呪術、ワンピ等）の強烈なシーン。</div></div>
-<div class="tip-box">⚠️ <b>NG：</b> 六本木のキャバ嬢のようなニッチな美女ではなく、フォロワー数が多いアイドルのような「大衆ウケ」する画像を選んでください。</div>` },
+<div class="check-grid">
+<div class="check-item">🔥 <b>トレンド画像：</b> TikTokで短期的にバズった人、芸能人のニュース、旬のトレンドなど。<b>最も有効</b></div>
+<div class="check-item">👩 <b>女性画像：</b> マスの男性に刺すなら爆美女より<b>可愛い系</b>（手に届きそう感）が良い。エロを想起する画像、彼女感のある画像。フォロワー10〜20万人ほどの女性インフルエンサー、AV女優、TikTokで有名な女性など</div>
+<div class="check-item">👨 <b>男性画像：</b> 「こうなりたい」層に刺さるビジュアル。男磨きやモテに関する投稿時に使用</div>
+<div class="check-item">🎌 <b>アニメ画像：</b> 認知度の高い作品やキャラクターのかっこいい画像</div>
+</div>
+<div class="tip-box">⚠️ <b>NG：</b> 六本木のキャバ嬢のようなニッチな美女ではなく、<b>フォロワー数が多いアイドルの超可愛い画像</b>のような「大衆ウケ」するものを選ぶ</div>` },
             {
-                id: "ch4-3", title: "4-3 常識の破壊と物議", html: `<h2>4-3 常識の破壊と物議</h2>
-<div class="alert-box">「当たり前のこと」を言う投稿は、ドーパミン溢れるTikTokでは一瞬でスルーされます。</div>
-<h3>2枚目。認知を破壊するテクニック</h3>
-<div class="check-grid"><div class="check-item">🚫 <b>常識の否定：</b> 「9割が勘違いしている」「実は逆効果」など</div><div class="check-item">📢 <b>新情報の提示：</b> 誰も知らない事実、隠された真実</div><div class="check-item">⚔️ <b>物議を醸す：</b> 大衆が良いと思うものを否定し、悪いと思うものを肯定する</div></div>
-<div class="tip-box">💡 <b>実例：</b> 「筋トレが大事」という当たり前の話ではなく、「筋トレだけしても一生モテない理由」と突きつけることで手を止めさせます。</div>` },
+                id: "ch4-5", title: "4-5 2枚目（興味引き）の原則", html: `<h2>4-5 2枚目（興味引き）の原則</h2>
+<div class="alert-box"><b>目的：見て興味を持ってもらう</b><br>その後の内容を見るかどうかを決めるため、重要度が高い。</div>
+<h3>効果的なテクニック</h3>
+<div class="check-grid">
+<div class="check-item">🚫 <b>常識の破壊：</b> 「9割が勘違いしている」「実は逆効果」など。当たり前のことを言ってもバズらない。おもしろくないから。</div>
+<div class="check-item">📢 <b>新情報の提示：</b> 誰も知らない事実、隠された真実</div>
+<div class="check-item">⚔️ <b>物議を醸す内容 ≒ 炎上させにいく：</b> 大衆が良いと思うものを悪く言い、悪いと思うものを良いと言う。論争が起こるような話題</div>
+<div class="check-item">💋 <b>エロ：</b> 性的な興味を引く要素</div>
+<div class="check-item">🔥 <b>トレンド：</b> 旬の話題を2枚目にも活用</div>
+</div>
+<div class="tip-box">💡 <b>実例：</b> 「筋トレが大事」= OUT。競合はドーパミンドバドバの面白い投稿。その中で見てもらわないといけない。<br>→「筋トレだけしても一生モテない理由」と突きつける方がスワイプが止まる。</div>` },
             {
-                id: "ch4-4", title: "4-4 構成テンプレート", html: `<h2>4-4 構成テンプレート（黄金の8枚構成）</h2>
+                id: "ch4-6", title: "4-6 3枚目以降（離脱防止）の原則", html: `<h2>4-6 3枚目以降（離脱防止）の原則</h2>
+<div class="alert-box"><b>目的：ユーザーを退屈させずに離脱を防ぐ</b></div>
+<div class="check-grid">
+<div class="check-item">📚 <b>有益性：</b> 読んで得になる・役に立つ情報</div>
+<div class="check-item">😂 <b>面白さ：</b> エンタメ性、意外性</div>
+<div class="check-item">✨ <b>目新しさ：</b> 見たことない切り口・演出</div>
+<div class="check-item">🔒 <b>信憑性：</b> 根拠やデータがあると読み続けてもらえる</div>
+</div>
+<div class="tip-box">💡 見続けてもらうためには、信憑性だったり読む価値がないと見てくれない。このグラデーションの部分が繊細だが、重要。</div>` },
+            {
+                id: "ch4-7", title: "4-7 構成テンプレート（黄金の8枚）", html: `<h2>4-7 構成テンプレート（黄金の8枚構成）</h2>
 <div class="flow-container"><div class="flow-step"><span>1枚目：違和感・分断（常識の否定）</span></div><div class="flow-arrow">↓</div><div class="flow-step"><span>2枚目：問題の明文化（当事者化）</span></div><div class="flow-arrow">↓</div><div class="flow-step"><span>3枚目：意外な真因（認知破壊）</span></div><div class="flow-arrow">↓</div><div class="flow-step"><span>4枚目：構造の提示（理屈の説明）</span></div><div class="flow-arrow">↓</div><div class="flow-step"><span>5枚目：具体例（Before/After）</span></div><div class="flow-arrow">↓</div><div class="flow-step"><span>6枚目：再現条件（誰でもできる）</span></div><div class="flow-arrow">↓</div><div class="flow-step"><span>7枚目：要約・圧縮（箇条書き）</span></div><div class="flow-arrow">↓</div><div class="flow-step"><span>8枚目：行動誘導（議論を生む質問）</span></div></div>` },
-            { id: "ch4-5", title: "4-5 既視感を消す「素数」", html: `<h2>4-5 既視感を消す「素数」の技術</h2><div class="tip-box">🔢 <b>素数の方がユーザー反応が良い：</b><br>5選や10選といったキリの良い数字は「人工的な広告臭」を感じさせます。<br><b>「7選」「11選」</b>などの素数は、脳が「なぜこの数字？」と一瞬思考するため、スワイプが止まりやすくなります。</div>` },
             {
-                id: "ch4-6", title: "4-6 コメント欄の設計", html: `<h2>4-6 コメント欄の設計</h2>
+                id: "ch4-8", title: "4-8 既視感の排除", html: `<h2>4-8 既視感の排除</h2>
+<div class="check-grid">
+<div class="check-item">🔢 <b>素数の技術：</b> 5選や10選といったキリの良い数字は「人工的な広告臭」を感じさせる。<b>「7選」「11選」</b>などの素数の方がスワイプが止まりやすい</div>
+<div class="check-item">🔄 <b>フォーマットの過剰露出を避ける：</b> 同じFMTを擦りすぎると、中身以前に「またこの系統か」という判断で弾かれる</div>
+<div class="check-item">🎨 <b>あらゆる角度から既視感を最小にする：</b> CRは枯れない。枯れるのは見栄えや素材が飽きられるから。同じ内容でもフォーマット・演出を変えれば再び伸びる</div>
+</div>` },
+            {
+                id: "ch4-9", title: "4-9 コメント欄の設計", html: `<h2>4-9 コメント欄の設計</h2>
 <div class="alert-box">コメント欄は商品購入に繋げるための重要なパート。ユーザーはコメント欄を見て「この商品、良さそう」と感じ、購入を検討する。</div>
 <h3>Point</h3>
-<div class="check-grid"><div class="check-item">📊 <b>訴求開始基準：</b> 5000再生を超えたら入れ始める</div><div class="check-item">📌 <b>コメント量：</b> 上位5〜10個が自社コメントにできればOK</div><div class="check-item">⏰ <b>タイミング：</b> 初期に入れることでいいねがつきやすく上位表示されやすい</div></div>
+<div class="check-grid"><div class="check-item">📊 <b>訴求開始基準：</b> 5000再生を超えたら入れ始める。1000再生あたりの動画に入れてもあまり意味なし</div><div class="check-item">📌 <b>コメント量：</b> 上位5〜10個が自社コメントにできればOK</div><div class="check-item">⏰ <b>タイミング：</b> 初期に入れることでいいねがつきやすく上位表示されやすい</div></div>
 <div class="comparison-grid"><div class="comp-box comp-success"><h4>やるべきこと</h4><p>・Amazon関連のワードを1~2個入れる<br>・一番大事なのは<b>想像を掻き立てるコメント</b><br>・投稿内容に関連する・共感されやすい内容と絡める</p></div><div class="comp-box comp-risk"><h4>やってはいけないこと</h4><p>・<b>PR感を出さないことが重要</b><br>・必要以上に商品名を言わない<br>・ステマっぽいコメントをしない</p></div></div>
 <p><a href="https://docs.google.com/spreadsheets/d/17b68JYL6FaWy45uXoeZz4LyrCMQczGqbC2Eth3_oCGQ/edit?gid=1143172260#gid=1143172260" target="_blank">▶ コメント管理シートを見る</a></p>` },
-            { id: "ch4-7", title: "4-7 分析と改善", html: `<h2>4-7 分析と改善</h2><div class="tip-box">📘 このセクションは現在執筆中です。KPIの読み方、何を見て次の投稿を改善するか、再生数vs保存率のマトリクスで投稿を分類する方法について追記予定。</div>` }
+            { id: "ch4-10", title: "4-10 分析と改善", html: `<h2>4-10 分析と改善</h2><div class="tip-box">📘 このセクションは現在執筆中です。KPIの読み方、何を見て次の投稿を改善するか、再生数vs保存率のマトリクスで投稿を分類する方法について追記予定。</div>` }
         ]
     },
     {
@@ -126,7 +178,7 @@ const MANUAL_DATA = [
 <div class="comparison-grid"><div class="comp-box comp-success"><h4>投稿前</h4><p>・参考動画URLをG列に記載<br>・投稿時にE列に「バズらせるために意識したこと」を記載</p></div><div class="comp-box comp-success"><h4>投稿後</h4><p>・効果/投稿URLを記載<br>・FB内容を確認<br>・FB内容を踏まえて今後に活かすことをF列「ネクストアクション」に記載</p></div></div>
 <h3>投稿作成の流れ</h3>
 <div class="flow-container"><div class="flow-step"><span class="step-number">①</span><span>リサーチして参考元のバズ動画を探す</span></div><div class="flow-arrow">↓</div><div class="flow-step"><span class="step-number">②</span><span>バズ動画をTTP（徹底的にパクる）or ＋αをして、投稿案を作成する</span></div></div>
-<div class="tip-box">⚠️ <b>最初はなるべく変数は変えずにパクるのが◯。</b>外しにくくなるから。変に弄ると、自身の仮説でバズ要素を消す可能性がある。</div>` },
+<div class="tip-box">⚠️ <b>投稿案作成の鉄則</b><br>・なるべくバズった要因であろう部分（変数）は動かさない<br>・その上でバズらせるために＋αのアイディアを乗っける<br>・全てパクったものをあげてもバズ投稿よりバズることはほぼない<br>・<b>最初はなるべく変数は変えずにパクるのが◯。</b>外しにくくなるから。変に弄ると、自身の仮説でバズ要素を消す可能性がある。</div>` },
             {
                 id: "ch7-2", title: "7-2 概要欄・ハッシュタグ・音楽", html: `<h2>7-2 概要欄・ハッシュタグ・音楽</h2>
 <h3>概要欄</h3>
