@@ -1612,3 +1612,21 @@ body {
         gap: 10px;
     }
 }
+
+.cc-card-static {
+    cursor: default;
+}
+
+.cc-card-static:hover {
+    transform: none;
+    border-color: var(--border);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.cc-card-static .cc-icon {
+    background: linear-gradient(135deg, var(--accent), #0284c7);
+    color: #fff;
+    font-weight: 800;
+    font-size: 1rem;
+    font-family: 'Outfit', sans-serif;
+}
