@@ -355,6 +355,54 @@ function initChat() {
     }
 
     let conversationHistory = [];
+    let pendingImages = [];
+
+    // 画像添付処理
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+
+    if (imageInput) {
+        imageInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('画像は5MB以下にしてください');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const base64 = ev.target.result;
+                    pendingImages.push(base64);
+                    renderImagePreview();
+                };
+                reader.readAsDataURL(file);
+            });
+            imageInput.value = '';
+        });
+    }
+
+    function renderImagePreview() {
+        if (!imagePreview) return;
+        if (pendingImages.length === 0) {
+            imagePreview.style.display = 'none';
+            imagePreview.innerHTML = '';
+            return;
+        }
+        imagePreview.style.display = 'flex';
+        imagePreview.innerHTML = pendingImages.map((img, i) => `
+            <div class="image-preview-item">
+                <img src="${img}" alt="添付画像">
+                <button class="image-preview-remove" onclick="removeImage(${i})">&times;</button>
+            </div>
+        `).join('');
+    }
+
+    // グローバルに公開
+    window.removeImage = function (idx) {
+        pendingImages.splice(idx, 1);
+        renderImagePreview();
+    };
+
 
     function addMessage(text, isAi, options = {}) {
         const div = document.createElement('div');
@@ -405,8 +453,22 @@ function initChat() {
                 badge.style.marginRight = '6px';
                 div.appendChild(badge);
             }
-            const textNode = document.createTextNode(text);
-            div.appendChild(textNode);
+            // 添付画像サムネイル表示
+            if (options.images && options.images.length > 0) {
+                const imgRow = document.createElement('div');
+                imgRow.classList.add('msg-images');
+                options.images.forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.classList.add('msg-image-thumb');
+                    imgRow.appendChild(img);
+                });
+                div.appendChild(imgRow);
+            }
+            if (text) {
+                const textNode = document.createTextNode(text);
+                div.appendChild(textNode);
+            }
         }
         chatMessages.appendChild(div);
         chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
@@ -416,13 +478,26 @@ function initChat() {
         const text = chatInput.value.trim();
         const model = modelSelector?.value || 'openai/gpt-5-mini';
         const isWebSearch = webSearchEnabled;
-        if (!text) return;
+        const images = [...pendingImages];
+        if (!text && images.length === 0) return;
 
-        addMessage(text, false, { webSearch: isWebSearch });
+        addMessage(text, false, { webSearch: isWebSearch, images: images });
         chatInput.value = '';
         chatInput.style.height = 'auto';
+        pendingImages = [];
+        renderImagePreview();
 
-        conversationHistory.push({ role: 'user', content: text });
+        // 画像付きの場合はmultimodal content
+        if (images.length > 0) {
+            const content = [];
+            if (text) content.push({ type: 'text', text: text });
+            images.forEach(img => {
+                content.push({ type: 'image_url', image_url: { url: img } });
+            });
+            conversationHistory.push({ role: 'user', content: content });
+        } else {
+            conversationHistory.push({ role: 'user', content: text });
+        }
 
         const thinking = document.createElement('div');
         thinking.classList.add('message', 'ai-message');
