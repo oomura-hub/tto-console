@@ -178,13 +178,11 @@ function generateLegacyStructure(fmt, container) {
 // 共通フォーマット関数
 function formatAiText(text) {
     // 1. まずリンク系を先に処理（HTMLエスケープ前に）
-    // Markdownリンク [text](url) → プレースホルダー
     const links = [];
     text = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, (_, label, url) => {
         links.push(`<a href="${url}" target="_blank" rel="noopener" class="ai-link">${label}</a>`);
         return `%%LINK${links.length - 1}%%`;
     });
-    // 裸のURL → プレースホルダー
     text = text.replace(/(https?:\/\/[^\s<>"'）\)]+)/g, (url) => {
         links.push(`<a href="${url}" target="_blank" rel="noopener" class="ai-link">${url}</a>`);
         return `%%LINK${links.length - 1}%%`;
@@ -196,20 +194,120 @@ function formatAiText(text) {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 
-    // 3. テキスト装飾
-    text = text
-        .replace(/\n\n/g, '<br><br>')
-        .replace(/\n/g, '<br>')
-        .replace(/「/g, '<b>「')
-        .replace(/」/g, '」</b>')
-        .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+    // 3. 行単位で処理
+    const lines = text.split('\n');
+    let html = '';
+    let inTable = false;
+    let inList = false;
+
+    for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+
+        // --- 区切り線 ---
+        if (/^-{3,}$/.test(line.trim()) || /^\*{3,}$/.test(line.trim())) {
+            if (inList) { html += '</ul>'; inList = false; }
+            if (inTable) { html += '</tbody></table>'; inTable = false; }
+            html += '<hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:16px 0">';
+            continue;
+        }
+
+        // --- 見出し ---
+        if (/^#{1,4}\s/.test(line.trim())) {
+            if (inList) { html += '</ul>'; inList = false; }
+            if (inTable) { html += '</tbody></table>'; inTable = false; }
+            const level = line.trim().match(/^(#{1,4})\s/)[1].length;
+            const headText = line.trim().replace(/^#{1,4}\s+/, '');
+            const sizes = { 1: '1.3em', 2: '1.15em', 3: '1.05em', 4: '0.95em' };
+            const colors = { 1: '#60a5fa', 2: '#818cf8', 3: '#a78bfa', 4: '#c4b5fd' };
+            html += `<div style="font-size:${sizes[level]};font-weight:700;color:${colors[level]};margin:${level <= 2 ? '20px' : '14px'} 0 8px;border-bottom:${level <= 2 ? '1px solid rgba(255,255,255,0.1)' : 'none'};padding-bottom:${level <= 2 ? '6px' : '0'}">${applyInline(headText)}</div>`;
+            continue;
+        }
+
+        // --- スライド番号（・1枚目 〜 ・8枚目）---
+        if (/^[・\*]\s*\d+枚目/.test(line.trim())) {
+            if (inList) { html += '</ul>'; inList = false; }
+            if (inTable) { html += '</tbody></table>'; inTable = false; }
+            html += `<div style="background:rgba(96,165,250,0.15);border-left:3px solid #60a5fa;padding:8px 12px;margin:14px 0 6px;border-radius:0 6px 6px 0;font-weight:700;font-size:1.05em;color:#93c5fd">${applyInline(line.trim())}</div>`;
+            continue;
+        }
+
+        // --- テーブル ---
+        if (line.trim().startsWith('|') && line.trim().endsWith('|')) {
+            // セパレータ行（|---|---|）はスキップ
+            if (/^\|[\s\-:]+\|/.test(line.trim())) continue;
+
+            const cells = line.trim().split('|').filter(c => c.trim() !== '');
+
+            if (!inTable) {
+                if (inList) { html += '</ul>'; inList = false; }
+                html += '<table style="width:100%;border-collapse:collapse;margin:8px 0;font-size:0.9em"><thead><tr>';
+                cells.forEach(c => {
+                    html += `<th style="text-align:left;padding:6px 10px;border-bottom:2px solid rgba(96,165,250,0.4);color:#93c5fd;font-weight:600">${applyInline(c.trim())}</th>`;
+                });
+                html += '</tr></thead><tbody>';
+                inTable = true;
+            } else {
+                html += '<tr>';
+                cells.forEach(c => {
+                    html += `<td style="padding:5px 10px;border-bottom:1px solid rgba(255,255,255,0.06)">${applyInline(c.trim())}</td>`;
+                });
+                html += '</tr>';
+            }
+            continue;
+        } else if (inTable) {
+            html += '</tbody></table>';
+            inTable = false;
+        }
+
+        // --- リスト（- で始まる行）---
+        if (/^[-•]\s/.test(line.trim())) {
+            if (!inList) {
+                html += '<ul style="margin:6px 0;padding-left:20px;list-style:none">';
+                inList = true;
+            }
+            const content = line.trim().replace(/^[-•]\s+/, '');
+            // 項目名：値 のパターンを検出
+            const kvMatch = content.match(/^(.+?)[：:]\s*(.+)$/);
+            if (kvMatch) {
+                html += `<li style="margin:4px 0;line-height:1.6">
+                    <span style="color:#93c5fd;font-weight:600">${applyInline(kvMatch[1])}</span>
+                    <span style="color:rgba(255,255,255,0.5);margin:0 4px">→</span>
+                    <span>${applyInline(kvMatch[2])}</span>
+                </li>`;
+            } else {
+                html += `<li style="margin:4px 0;line-height:1.6;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:#60a5fa">•</span>${applyInline(content)}</li>`;
+            }
+            continue;
+        } else if (inList) {
+            html += '</ul>';
+            inList = false;
+        }
+
+        // --- 通常テキスト ---
+        if (line.trim() === '') {
+            html += '<div style="height:8px"></div>';
+        } else {
+            html += `<div style="line-height:1.7;margin:2px 0">${applyInline(line)}</div>`;
+        }
+    }
+
+    if (inList) html += '</ul>';
+    if (inTable) html += '</tbody></table>';
 
     // 4. リンクのプレースホルダーを復元
     links.forEach((link, i) => {
-        text = text.replace(`%%LINK${i}%%`, link);
+        html = html.replace(`%%LINK${i}%%`, link);
     });
 
-    return text;
+    return html;
+}
+
+// インライン装飾（太字・「」強調）
+function applyInline(text) {
+    return text
+        .replace(/\*\*(.*?)\*\*/g, '<b style="color:#e2e8f0">$1</b>')
+        .replace(/「/g, '<b style="color:#fbbf24">「')
+        .replace(/」/g, '」</b>');
 }
 
 async function callChatAPI(model, messages, webSearch = false) {
