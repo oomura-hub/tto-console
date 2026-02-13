@@ -129,24 +129,31 @@ function renderUnifiedResults(rawText, container) {
     const analysis = sections[0];
     const patterns = sections.slice(1);
 
+    const patternColors = ['#60a5fa', '#a78bfa', '#34d399'];
+    const patternLabels = ['PATTERN A', 'PATTERN B', 'PATTERN C'];
+
     let html = `
-        <div class="analysis-result-section">
-            <h3 class="section-title">🔍 バズ投稿の解剖結果</h3>
-            <div class="analysis-card">
-                <div class="proposal-content">${formatAiText(analysis)}</div>
-            </div>
-        </div>
-        
-        <div class="proposal-header">
-            <h3 class="section-title">💡 転用構成案（3パターン）</h3>
-        </div>
-        <div class="proposal-grid">
-            ${patterns.map((p, i) => `
-                <div class="proposal-card">
-                    <span class="proposal-tag">PATTERN ${String.fromCharCode(65 + i)}</span>
-                    <div class="proposal-content">${formatAiText(p)}</div>
+        <div class="gen-results-wrapper">
+            <div class="gen-section">
+                <h3 class="gen-section-title">💡 転用構成案（${patterns.length}パターン）</h3>
+                <div class="gen-patterns">
+                    ${patterns.map((p, i) => `
+                        <div class="gen-pattern-card" style="--pattern-color: ${patternColors[i] || '#60a5fa'}">
+                            <div class="gen-pattern-header">
+                                <span class="gen-pattern-tag" style="background: ${patternColors[i] || '#60a5fa'}20; color: ${patternColors[i] || '#60a5fa'}; border: 1px solid ${patternColors[i] || '#60a5fa'}40">${patternLabels[i] || `PATTERN ${i + 1}`}</span>
+                            </div>
+                            <div class="gen-pattern-body">${formatAiText(p)}</div>
+                        </div>
+                    `).join('')}
                 </div>
-            `).join('')}
+            </div>
+            
+            <div class="gen-section">
+                <h3 class="gen-section-title">🔍 バズ投稿の解剖結果</h3>
+                <div class="gen-analysis-card">
+                    <div class="gen-analysis-body">${formatAiText(analysis)}</div>
+                </div>
+            </div>
         </div>
     `;
     container.innerHTML = html;
@@ -206,76 +213,72 @@ function formatAiText(text) {
         // --- 区切り線 ---
         if (/^-{3,}$/.test(line.trim()) || /^\*{3,}$/.test(line.trim())) {
             if (inList) { html += '</ul>'; inList = false; }
-            if (inTable) { html += '</tbody></table>'; inTable = false; }
-            html += '<hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:16px 0">';
+            if (inTable) { html += '</tbody></table></div>'; inTable = false; }
+            html += '<hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:12px 0">';
             continue;
         }
 
         // --- 見出し ---
         if (/^#{1,4}\s/.test(line.trim())) {
             if (inList) { html += '</ul>'; inList = false; }
-            if (inTable) { html += '</tbody></table>'; inTable = false; }
+            if (inTable) { html += '</tbody></table></div>'; inTable = false; }
             const level = line.trim().match(/^(#{1,4})\s/)[1].length;
             const headText = line.trim().replace(/^#{1,4}\s+/, '');
-            const sizes = { 1: '1.3em', 2: '1.15em', 3: '1.05em', 4: '0.95em' };
-            const colors = { 1: '#60a5fa', 2: '#818cf8', 3: '#a78bfa', 4: '#c4b5fd' };
-            html += `<div style="font-size:${sizes[level]};font-weight:700;color:${colors[level]};margin:${level <= 2 ? '20px' : '14px'} 0 8px;border-bottom:${level <= 2 ? '1px solid rgba(255,255,255,0.1)' : 'none'};padding-bottom:${level <= 2 ? '6px' : '0'}">${applyInline(headText)}</div>`;
+            if (level <= 2) {
+                html += `<div style="font-size:0.95rem;font-weight:700;color:#e2e8f0;margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.06)">${applyInline(headText)}</div>`;
+            } else {
+                html += `<div style="font-size:0.88rem;font-weight:600;color:#94a3b8;margin:12px 0 6px">${applyInline(headText)}</div>`;
+            }
             continue;
         }
 
         // --- スライド番号（・1枚目 〜 ・8枚目）---
         if (/^[・\*]\s*\d+枚目/.test(line.trim())) {
             if (inList) { html += '</ul>'; inList = false; }
-            if (inTable) { html += '</tbody></table>'; inTable = false; }
-            html += `<div style="background:rgba(96,165,250,0.15);border-left:3px solid #60a5fa;padding:8px 12px;margin:14px 0 6px;border-radius:0 6px 6px 0;font-weight:700;font-size:1.05em;color:#93c5fd">${applyInline(line.trim())}</div>`;
+            if (inTable) { html += '</tbody></table></div>'; inTable = false; }
+            html += `<div style="background:rgba(96,165,250,0.08);border-left:2px solid #60a5fa;padding:6px 12px;margin:12px 0 4px;border-radius:0 4px 4px 0;font-weight:700;font-size:0.88rem;color:#93c5fd">${applyInline(line.trim())}</div>`;
             continue;
         }
 
         // --- テーブル ---
         if (line.trim().startsWith('|') && line.trim().endsWith('|')) {
-            // セパレータ行（|---|---|）はスキップ
             if (/^\|[\s\-:]+\|/.test(line.trim())) continue;
-
             const cells = line.trim().split('|').filter(c => c.trim() !== '');
-
             if (!inTable) {
                 if (inList) { html += '</ul>'; inList = false; }
-                html += '<table style="width:100%;border-collapse:collapse;margin:8px 0;font-size:0.9em"><thead><tr>';
+                html += '<div style="overflow-x:auto;margin:6px 0"><table style="width:100%;border-collapse:collapse;font-size:0.82rem"><thead><tr>';
                 cells.forEach(c => {
-                    html += `<th style="text-align:left;padding:6px 10px;border-bottom:2px solid rgba(96,165,250,0.4);color:#93c5fd;font-weight:600">${applyInline(c.trim())}</th>`;
+                    html += `<th style="text-align:left;padding:6px 10px;border-bottom:1px solid rgba(255,255,255,0.1);color:#94a3b8;font-weight:600;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.3px">${applyInline(c.trim())}</th>`;
                 });
                 html += '</tr></thead><tbody>';
                 inTable = true;
             } else {
                 html += '<tr>';
                 cells.forEach(c => {
-                    html += `<td style="padding:5px 10px;border-bottom:1px solid rgba(255,255,255,0.06)">${applyInline(c.trim())}</td>`;
+                    html += `<td style="padding:5px 10px;border-bottom:1px solid rgba(255,255,255,0.04);color:#cbd5e1">${applyInline(c.trim())}</td>`;
                 });
                 html += '</tr>';
             }
             continue;
         } else if (inTable) {
-            html += '</tbody></table>';
+            html += '</tbody></table></div>';
             inTable = false;
         }
 
         // --- リスト（- で始まる行）---
         if (/^[-•]\s/.test(line.trim())) {
             if (!inList) {
-                html += '<ul style="margin:6px 0;padding-left:20px;list-style:none">';
+                html += '<ul style="margin:4px 0;padding-left:0;list-style:none">';
                 inList = true;
             }
             const content = line.trim().replace(/^[-•]\s+/, '');
-            // 項目名：値 のパターンを検出
             const kvMatch = content.match(/^(.+?)[：:]\s*(.+)$/);
             if (kvMatch) {
-                html += `<li style="margin:4px 0;line-height:1.6">
-                    <span style="color:#93c5fd;font-weight:600">${applyInline(kvMatch[1])}</span>
-                    <span style="color:rgba(255,255,255,0.5);margin:0 4px">→</span>
-                    <span>${applyInline(kvMatch[2])}</span>
+                html += `<li style="margin:3px 0;line-height:1.6;padding:2px 0">
+                    <span style="color:#93c5fd;font-weight:600;font-size:0.84rem">${applyInline(kvMatch[1])}</span><span style="color:rgba(255,255,255,0.3);margin:0 6px">―</span><span style="color:#cbd5e1">${applyInline(kvMatch[2])}</span>
                 </li>`;
             } else {
-                html += `<li style="margin:4px 0;line-height:1.6;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:#60a5fa">•</span>${applyInline(content)}</li>`;
+                html += `<li style="margin:3px 0;line-height:1.6;padding-left:14px;position:relative"><span style="position:absolute;left:0;color:#475569">•</span><span style="color:#cbd5e1">${applyInline(content)}</span></li>`;
             }
             continue;
         } else if (inList) {
@@ -285,14 +288,14 @@ function formatAiText(text) {
 
         // --- 通常テキスト ---
         if (line.trim() === '') {
-            html += '<div style="height:8px"></div>';
+            html += '<div style="height:6px"></div>';
         } else {
-            html += `<div style="line-height:1.7;margin:2px 0">${applyInline(line)}</div>`;
+            html += `<div style="line-height:1.7;margin:1px 0;color:#cbd5e1">${applyInline(line)}</div>`;
         }
     }
 
     if (inList) html += '</ul>';
-    if (inTable) html += '</tbody></table>';
+    if (inTable) html += '</tbody></table></div>';
 
     // 4. リンクのプレースホルダーを復元
     links.forEach((link, i) => {
@@ -305,9 +308,9 @@ function formatAiText(text) {
 // インライン装飾（太字・「」強調）
 function applyInline(text) {
     return text
-        .replace(/\*\*(.*?)\*\*/g, '<b style="color:#e2e8f0">$1</b>')
-        .replace(/「/g, '<b style="color:#fbbf24">「')
-        .replace(/」/g, '」</b>');
+        .replace(/\*\*(.*?)\*\*/g, '<b style="color:#e2e8f0;font-weight:600">$1</b>')
+        .replace(/「/g, '<span style="color:#fbbf24;font-weight:600">「')
+        .replace(/」/g, '」</span>');
 }
 
 async function callChatAPI(model, messages, webSearch = false) {
