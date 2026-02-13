@@ -324,7 +324,7 @@ async function callChatAPI(model, messages, webSearch = false) {
             model: model,
             messages: messages,
             temperature: 0.7,
-            max_tokens: 3500,
+            max_tokens: 8000,
             webSearch: webSearch
         })
     });
