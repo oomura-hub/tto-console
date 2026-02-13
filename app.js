@@ -537,16 +537,72 @@ function initChat() {
         pendingImages = [];
         renderImagePreview();
 
+        // --- TikTok URL自動データ取得 ---
+        const tiktokUrlRegex = /https?:\/\/(?:www\.|vm\.|vt\.)?tiktok\.com\/[^\s<>"')]+/gi;
+        const foundUrls = text.match(tiktokUrlRegex) || [];
+        let tiktokContext = '';
+
+        if (foundUrls.length > 0) {
+            // 思考中UIを先に表示（データ取得に時間がかかるため）
+            const fetchingDiv = document.createElement('div');
+            fetchingDiv.classList.add('message', 'ai-message');
+            fetchingDiv.id = 'thinking';
+            fetchingDiv.innerHTML = '<span class="thinking-step">📡 TikTok投稿データを取得中...</span>';
+            chatMessages.appendChild(fetchingDiv);
+            chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
+
+            for (const url of foundUrls.slice(0, 3)) { // 最大3件まで
+                try {
+                    const res = await fetch(`${API_BASE_RESEARCH}/api/tiktok-batch`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: url })
+                    });
+                    const data = await res.json();
+                    if (!data.error) {
+                        const saveRate = data.playCount > 0 ? ((data.collectCount / data.playCount) * 100).toFixed(2) : '0.00';
+                        const engRate = data.playCount > 0 ? (((data.diggCount + data.commentCount + data.shareCount + data.collectCount) / data.playCount) * 100).toFixed(2) : '0.00';
+                        tiktokContext += `\n\n【自動取得されたTikTok投稿データ】
+URL: ${url}
+投稿者: @${data.author || 'unknown'}
+キャプション: ${(data.caption || '').slice(0, 500)}
+再生数: ${(data.playCount || 0).toLocaleString()}
+いいね数: ${(data.diggCount || 0).toLocaleString()}
+コメント数: ${(data.commentCount || 0).toLocaleString()}
+シェア数: ${(data.shareCount || 0).toLocaleString()}
+保存数: ${(data.collectCount || 0).toLocaleString()}
+保存率: ${saveRate}%
+エンゲージメント率: ${engRate}%
+投稿形式: ${data.imagePost ? '画像スライド（カルーセル）' : '動画'}
+${data.imagePost && data.imagePost.images ? '画像枚数: ' + data.imagePost.images.length + '枚' : ''}
+${data.musicMeta ? '音楽: ' + (data.musicMeta.musicName || '') + ' / ' + (data.musicMeta.musicAuthor || '') : ''}
+ハッシュタグ: ${(data.hashtags || []).map(h => '#' + (h.name || h)).join(' ') || 'なし'}`;
+                    } else {
+                        tiktokContext += `\n\n【TikTokデータ取得失敗】URL: ${url} - ${data.error}`;
+                    }
+                } catch (e) {
+                    tiktokContext += `\n\n【TikTokデータ取得失敗】URL: ${url} - 通信エラー: ${e.message}`;
+                }
+            }
+
+            // 取得中UIを削除
+            const fetchEl = document.getElementById('thinking');
+            if (fetchEl) fetchEl.remove();
+        }
+
+        // ユーザーメッセージにTikTokデータを付加してconversationHistoryに追加
+        const enrichedText = tiktokContext ? text + tiktokContext : text;
+
         // 画像付きの場合はmultimodal content
         if (images.length > 0) {
             const content = [];
-            if (text) content.push({ type: 'text', text: text });
+            if (enrichedText) content.push({ type: 'text', text: enrichedText });
             images.forEach(img => {
                 content.push({ type: 'image_url', image_url: { url: img } });
             });
             conversationHistory.push({ role: 'user', content: content });
         } else {
-            conversationHistory.push({ role: 'user', content: text });
+            conversationHistory.push({ role: 'user', content: enrichedText });
         }
 
         const thinking = document.createElement('div');
@@ -569,7 +625,7 @@ function initChat() {
             }, 3000);
             thinking._stepInterval = stepInterval;
         } else {
-            thinking.textContent = '思考中...';
+            thinking.textContent = tiktokContext ? '📊 投稿データをもとに分析中...' : '思考中...';
         }
 
         chatMessages.appendChild(thinking);
@@ -584,7 +640,8 @@ TikTok Organic（TTO）の専門家として回答してください。
 ${manualText}
 
 【ルール】
-箇条書きは「・」を使用。日本語で回答。参考URLがある場合は必ずリンクを含めてください。Markdownリンク形式 [サイト名](URL) での記載を推奨します。${isWebSearch ? '\nWeb検索結果が提供された場合、それを踏まえて最新かつ正確な情報に基づいて回答してください。必ず出典元のURLリンクを含めてください。' : ''}`;
+箇条書きは「・」を使用。日本語で回答。参考URLがある場合は必ずリンクを含めてください。Markdownリンク形式 [サイト名](URL) での記載を推奨します。
+ユーザーのメッセージに【自動取得されたTikTok投稿データ】が含まれている場合、そのデータはシステムが自動取得した正確な実データです。このデータを活用して、SGT式TTOの視点で詳細な分析を行ってください。${isWebSearch ? '\nWeb検索結果が提供された場合、それを踏まえて最新かつ正確な情報に基づいて回答してください。必ず出典元のURLリンクを含めてください。' : ''}`;
 
             const messages = [{ role: 'system', content: systemPrompt }, ...conversationHistory];
 
