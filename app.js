@@ -206,7 +206,8 @@ URL: ${url}
 }
 
 function renderUnifiedResults(rawText, container) {
-    const sections = rawText.split(/(?=Pattern A|Pattern B|Pattern C|【パターン|【構成案)/i);
+    // 行頭の "## Pattern A" や "---" の後の "Pattern A" のみでスプリット
+    const sections = rawText.split(/(?=^-{3,}\s*\n\s*(?:##\s*)?Pattern [A-C]|^(?:##\s*)?Pattern [A-C](?:\s|（|:))/im);
     const analysis = sections[0];
     const patterns = sections.slice(1);
 
